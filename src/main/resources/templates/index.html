@@ -5,21 +5,19 @@
 <title>Work Visit</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/node_modules/angularjs-datepicker/src/css/angular-datepicker.css" />
+<link rel="stylesheet" href="/node_modules/angularjs-datetime-picker/angularjs-datetime-picker.css" />
+
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js"></script>
-
-<script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="/node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
 <script src="/node_modules/angularjs-datepicker/src/js/angular-datepicker.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
-<script src="/node_modules/angular-moment-picker/dist/angular-moment-picker.min.js"></script>
 <script src="/node_modules/angularjs-datetime-picker/angularjs-datetime-picker.js"></script>
 <script src="/js/workVisitController.js"></script>
-<!-- <script src="/js/directives.js"></script> -->
-<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/node_modules/angularjs-datepicker/src/css/angular-datepicker.css" />
-<link rel="stylesheet" href="/node_modules/angular-moment-picker/dist/angular-moment-picker.min.css" />
-<link rel="stylesheet" href="/node_modules/angularjs-datetime-picker/angularjs-datetime-picker.css"/>
 
 </head>
 <body>
@@ -34,24 +32,27 @@
 					site.</p>
 				<h4 th:text="'IBX Information'" />
 
-				<div class="row">
+				<div class="row panel panel-default">
 					<div class="col-sm-4 margin-10">
 						<label><h5 th:text="'IBX'" /></label><span class="required">*</span> <select
-							style="width: auto;" ng-model="ibx" ng-options="o.ibx for o in IbsVals | unique:'ibx'" ng-change="getCage()">
+							style="width: auto;" ng-model="ibx" ng-options="o.ibx for o in IbsVals | unique:'ibx'"
+							ng-change="getCage()">
 							<option value="">Select an IBX</option>
 						</select>
 						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
 					</div>
 					<div class="col-sm-4 margin-10">
 						<label><h5 th:text="'Cage/Suite'" /></label><span class="required">*</span> <select
-							style="width: auto;" ng-model="cage" ng-options="o.cage for o in cageList | unique:'cage'" ng-change="getCabinet()">
+							style="width: auto;" ng-model="cage" ng-options="o.cage for o in cageList | unique:'cage'"
+							ng-change="getCabinet()">
 							<option value="">Select a Cage</option>
 						</select>
 						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
 					</div>
 					<div class="col-sm-4 margin-10">
 						<label><h5 th:text="'Cabinets'" /></label><span class="required">*</span> <select
-							style="width: auto;" ng-model="cabinet" ng-options="o.cabinet for o in cabinetList | unique:'cabinet'">
+							style="width: auto;" ng-model="cabinet"
+							ng-options="o.cabinet for o in cabinetList | unique:'cabinet'">
 							<option value="">Select Cabinets</option>
 						</select>
 						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
@@ -71,10 +72,11 @@
 									<td><input ng-model="f.lastName" th:placeholder="'Enter Name'" /></td>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody class="well">
 								<tr ng-repeat="visitor in visitors | filter:f" ng-click="wvSelected(visitor);">
 									<td>{{visitor.firstName}}, {{visitor.lastName}}</td>
-									<td>View Details</td>
+									<td><a id="release" th:href="@{/viewDetails/{{visitor.firstName}}}"><label
+											th:text="'View Details'" /> </a> <span>&nbsp;</span></td>
 								</tr>
 							</tbody>
 						</table>
@@ -86,13 +88,16 @@
 							<tr>
 								<th>Name</th>
 								<th>Company</th>
+								<th style="display: none;"></th>
 							</tr>
 
 							<!-- <tr ng-repeat="selVisitor in selVisitors"> -->
-							<tr>
+							<tr class="well">
 								<!-- <td>{{ selVisitor.firstName }}</td> -->
-								<td>{{selVisitors.firstName}}</td>
+								<td>{{selVisitors.userName}}</td>
 								<td>{{ selVisitors.company }}</td>
+								<td><a id="release" th:href="@{/removeUser/{{selVisitors.lastName}}}"><label
+										th:text="'Remove'" /> </a> <span>&nbsp;</span></td>
 							</tr>
 						</table>
 					</div>
@@ -119,9 +124,9 @@
 							<label><h5 th:text="'End Date/Time'" /></label><span class="required">*</span>
 							<datepicker date-format="dd-MM-yyyy" selector="form-control">
 							<div class="input-group">
-								<input class="form-control" ng-model="workVisitDetails.endDate"
-									placeholder="Choose a date" /> <span class="input-group-addon" style="cursor: pointer">
-									<i class="fa fa-lg fa-calendar"></i>
+								<input class="form-control" ng-model="workVisitDetails.endDate" placeholder="Choose a date" />
+								<span class="input-group-addon" style="cursor: pointer"> <i
+									class="fa fa-lg fa-calendar"></i>
 								</span>
 							</div>
 							</datepicker>
