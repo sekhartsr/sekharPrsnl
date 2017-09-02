@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:tiles="http://www.thymeleaf.org">
+<head>
+<title>Work Visit</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.min.js"></script>
+<script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+<script src="/node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+<script src="/node_modules/angularjs-datepicker/src/js/angular-datepicker.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
+<script src="/node_modules/angular-moment-picker/dist/angular-moment-picker.min.js"></script>
+<script src="/node_modules/angularjs-datetime-picker/angularjs-datetime-picker.js"></script>
+<script src="/js/workVisitController.js"></script>
+<!-- <script src="/js/directives.js"></script> -->
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/node_modules/angularjs-datepicker/src/css/angular-datepicker.css" />
+<link rel="stylesheet" href="/node_modules/angular-moment-picker/dist/angular-moment-picker.min.css" />
+<link rel="stylesheet" href="/node_modules/angularjs-datetime-picker/angularjs-datetime-picker.css"/>
+
+</head>
+<body>
+	<div class="container" ng-app="app">
+		<div class="col-sm-12" ng-controller="postcontroller">
+			<form name="workVisitForm" ng-submit="submitForm()">
+				<!-- <label>FirstName</label> <input type="text" name="firstname" class="form-control" ng-model="firstname" /> <input type="text" name="lastname" class="form-control"
+					ng-model="lastname" /> -->
+				<h4 th:text="'WORK VISIT'" />
+				<p>Schedule a Work Visit by providing the IBX and Cage you will need access to the dates and
+					times of the visit and some basic information about the visitors who will be arriving at the
+					site.</p>
+				<h4 th:text="'IBX Information'" />
+
+				<div class="row">
+					<div class="col-sm-4 margin-10">
+						<label><h5 th:text="'IBX'" /></label><span class="required">*</span> <select
+							style="width: auto;" ng-model="ibx" ng-options="o.label for o in options">
+							<option value="">Select an IBX</option>
+						</select>
+						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
+					</div>
+					<div class="col-sm-4 margin-10">
+						<label><h5 th:text="'Cage/Suite'" /></label><span class="required">*</span> <select
+							style="width: auto;" ng-model="cage" ng-options="o.label for o in options">
+							<option value="">Select a Cage</option>
+						</select>
+						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
+					</div>
+					<div class="col-sm-4 margin-10">
+						<label><h5 th:text="'Cabinets'" /></label><span class="required">*</span> <select
+							style="width: auto;" ng-model="cabinet" ng-options="o.label for o in options">
+							<option value="">Select Cabinets</option>
+						</select>
+						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
+					</div>
+				</div>
+				<h4 th:text="'Visitor(s)'" />
+				<p>Please select the users that will be visiting the IBX by checking the box next to their
+					name. User details can be viewed by expanding theri list entry. Search by last name to locate
+					users.</p>
+
+				<div class="row">
+					<div class="col-sm-4 margin-10">
+
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<td><input ng-model="f.lastName" th:placeholder="'Enter Name'" /></td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="visitor in visitors | filter:f" ng-click="wvSelected(visitor);">
+									<td>{{visitor.firstName}}, {{visitor.lastName}}</td>
+									<td>View Details</td>
+								</tr>
+							</tbody>
+						</table>
+						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
+					</div>
+					<div class="col-sm-6 margin-10">
+						<label><h4 th:text="'Verify Your Selections'" /></label><span class="required">*</span>
+						<table class="table table-striped">
+							<tr>
+								<th>Name</th>
+								<th>Company</th>
+							</tr>
+
+							<!-- <tr ng-repeat="selVisitor in selVisitors"> -->
+							<tr>
+								<!-- <td>{{ selVisitor.firstName }}</td> -->
+								<td>{{selVisitors.firstName}}</td>
+								<td>{{ selVisitors.company }}</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group">
+						<div class="col-md-4">
+							<label><h5 th:text="'Start Date/Time'" /></label><span class="required">*</span>
+							<datepicker date-format="dd-MM-yyyy" selector="form-control">
+							<div class="input-group">
+								<input class="form-control" ng-model="workVisitDetails.startDate"
+									placeholder="Choose a date" /> <span class="input-group-addon" style="cursor: pointer">
+									<i class="fa fa-calendar-o" aria-hidden="true"></i>
+								</span>
+							</div>
+							</datepicker>
+
+							<!-- <input type="date" ng-model="user.dob" name="dob" ng-required="true" class="form-control" /> -->
+							<!-- <p ng-show="userForm.dob.$error.required && (userForm.$submitted || userForm.dob.$dirty)"
+								class="text-danger">Please Enter DOB.</p> -->
+						</div>
+
+						<div class="col-md-4">
+							<label><h5 th:text="'End Date/Time'" /></label><span class="required">*</span>
+							<datepicker date-format="dd-MM-yyyy" selector="form-control">
+							<div class="input-group">
+								<input class="form-control" ng-model="workVisitDetails.endDate"
+									placeholder="Choose a date" /> <span class="input-group-addon" style="cursor: pointer">
+									<i class="fa fa-lg fa-calendar"></i>
+								</span>
+							</div>
+							</datepicker>
+							<!-- <input type="date" ng-model="user.dob" name="dob" ng-required="true" class="form-control" /> -->
+							<!-- <p ng-show="userForm.dob.$error.required && (userForm.$submitted || userForm.dob.$dirty)"
+								class="text-danger">Please Enter DOB.</p> -->
+						</div>
+
+					</div>
+				</div>
+				<div class="row" style="position: relative; left: 80%; right: 10%; bottom: 50%;">
+					<label>Request Complete?</label>
+					<button type="submit" class="btn btn-primary">Submit Request</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
+<style>
+.select {
+	padding-right: 25px;
+	background-image: url(...);
+	background-position: right top;
+}
+
+.required {
+	color: red;
+}
+
+select {
+	min-width: 120px;
+	max-width: 120px;
+}
+
+select:focus {
+	width: auto;
+}
+
+tbody {
+	height: 200px;
+	display: inline-block;
+	width: 100%;
+	overflow: auto;
+	width: 100%;
+}
+
+thead {
+	display: inline-block;
+}
+
+tr[ng-click] {
+	cursor: pointer;
+}
+</style>
