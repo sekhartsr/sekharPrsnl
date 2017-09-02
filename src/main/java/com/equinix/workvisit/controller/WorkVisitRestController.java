@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.equinix.workvisit.model.WorkVisit;
@@ -32,6 +33,18 @@ public class WorkVisitRestController {
 	public List<WorkVisitUsers> getAllUsers() {
 		List<WorkVisitUsers> workVisitUsers =  workVisitUsersService.findAll();
 		return workVisitUsers;
+	}
+	
+	@RequestMapping(value = "/getByIbx", method = RequestMethod.GET)
+	public List<WorkVisitIBXInfo> findByIbx(@RequestParam String ibx) {
+		List<WorkVisitIBXInfo> workVisitCage =  workVisitIBXInfoService.findByIbx(ibx);
+		return workVisitCage;
+	}
+	
+	@RequestMapping(value = "/getByCage", method = RequestMethod.GET)
+	public List<WorkVisitIBXInfo> findByCage(@RequestParam String cage) {
+		List<WorkVisitIBXInfo> workVisitCage =  workVisitIBXInfoService.findByCage(cage);
+		return workVisitCage;
 	}
 
 	@RequestMapping(value = "/getworkvisit", method = RequestMethod.GET)

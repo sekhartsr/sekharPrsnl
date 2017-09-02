@@ -6,6 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js"></script>
+
 <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
 <script src="/node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
 <script src="/node_modules/angularjs-datepicker/src/js/angular-datepicker.js"></script>
@@ -35,21 +37,21 @@
 				<div class="row">
 					<div class="col-sm-4 margin-10">
 						<label><h5 th:text="'IBX'" /></label><span class="required">*</span> <select
-							style="width: auto;" ng-model="ibx" ng-options="o.label for o in options">
+							style="width: auto;" ng-model="ibx" ng-options="o.ibx for o in IbsVals | unique:'ibx'" ng-change="getCage()">
 							<option value="">Select an IBX</option>
 						</select>
 						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
 					</div>
 					<div class="col-sm-4 margin-10">
 						<label><h5 th:text="'Cage/Suite'" /></label><span class="required">*</span> <select
-							style="width: auto;" ng-model="cage" ng-options="o.label for o in options">
+							style="width: auto;" ng-model="cage" ng-options="o.cage for o in cageList | unique:'cage'" ng-change="getCabinet()">
 							<option value="">Select a Cage</option>
 						</select>
 						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
 					</div>
 					<div class="col-sm-4 margin-10">
 						<label><h5 th:text="'Cabinets'" /></label><span class="required">*</span> <select
-							style="width: auto;" ng-model="cabinet" ng-options="o.label for o in options">
+							style="width: auto;" ng-model="cabinet" ng-options="o.cabinet for o in cabinetList | unique:'cabinet'">
 							<option value="">Select Cabinets</option>
 						</select>
 						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
