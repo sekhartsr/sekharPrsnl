@@ -136,8 +136,9 @@ app.controller('postcontroller', function($scope, $http, $location) {
 			$scope.postResultMessage = "Fail!";
 		});
 
-		$scope.firstname = "";
-		$scope.lastname = "";
+		$scope.ibx = "";
+		$scope.cage = "";
+		$scope.cabinet = "";
 	}
 });
 
