@@ -97,7 +97,7 @@ app.controller('postcontroller', function($scope, $http, $location) {
 	 * $scope.subjects = [ { name : "option1", marks : "1" }, { name :
 	 * "option2", marks : "2" }, { name : "option3", marks : "3" } ];
 	 */
-	$scope.selVisitors = null;
+
 	$scope.wvSelected = function(my_visitor) {
 		$scope.selVisitors = my_visitor;
 		console.log($scope.selVisitors);
