@@ -37,13 +37,16 @@ public class WorkVisit extends AbstractEntity implements Serializable{
 	
 	@Column(name = "WV_USEER")
 	private String workVisitUser;
+	
+	@Column(name = "WV_DTLS")
+	private String workVisitDtls;
 
 	@Transient
 	private List<WorkVisitUsers> workVisitUsers;
+	
+	@Transient
+	private List<WorkVisitDetails> workVisitDetails;
 
-	/*
-	 * @Column(name="WV_DETAILS") private WorkVisitDetails workVisitDetails;
-	 */
 	public WorkVisit() {
 	}
 
@@ -129,22 +132,33 @@ public class WorkVisit extends AbstractEntity implements Serializable{
 		this.workVisitUser = workVisitUser;
 	}
 
-	/*
-		*//**
-			 * @return the workVisitDetails
-			 */
-	/*
-	 * public WorkVisitDetails getWorkVisitDetails() { return workVisitDetails;
-	 * }
-	 * 
-	 *//**
-		 * @param workVisitDetails
-		 *            the workVisitDetails to set
-		 *//*
-		 * public void setWorkVisitDetails(WorkVisitDetails workVisitDetails) {
-		 * this.workVisitDetails = workVisitDetails; }
-		 * 
-		 */
+	/**
+	 * @return the workVisitDtls
+	 */
+	public String getWorkVisitDtls() {
+		return workVisitDtls;
+	}
+
+	/**
+	 * @param workVisitDtls the workVisitDtls to set
+	 */
+	public void setWorkVisitDtls(String workVisitDtls) {
+		this.workVisitDtls = workVisitDtls;
+	}
+
+	/**
+	 * @return the workVisitDetails
+	 */
+	public List<WorkVisitDetails> getWorkVisitDetails() {
+		return workVisitDetails;
+	}
+
+	/**
+	 * @param workVisitDetails the workVisitDetails to set
+	 */
+	public void setWorkVisitDetails(List<WorkVisitDetails> workVisitDetails) {
+		this.workVisitDetails = workVisitDetails;
+	}
 
 	@Override
 	public String getCreateId() {

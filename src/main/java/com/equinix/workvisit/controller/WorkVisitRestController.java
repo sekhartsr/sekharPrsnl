@@ -18,10 +18,10 @@ import com.equinix.workvisit.services.WorkVisitUsersService;
 
 @RestController
 public class WorkVisitRestController {
-	
+
 	@Autowired
 	WorkVisitIBXInfoService workVisitIBXInfoService;
-	
+
 	@Autowired
 	WorkVisitUsersService workVisitUsersService;
 
@@ -31,19 +31,19 @@ public class WorkVisitRestController {
 
 	@RequestMapping(value = "/getallUsers", method = RequestMethod.GET)
 	public List<WorkVisitUsers> getAllUsers() {
-		List<WorkVisitUsers> workVisitUsers =  workVisitUsersService.findAll();
+		List<WorkVisitUsers> workVisitUsers = workVisitUsersService.findAll();
 		return workVisitUsers;
 	}
-	
+
 	@RequestMapping(value = "/getByIbx", method = RequestMethod.GET)
 	public List<WorkVisitIBXInfo> findByIbx(@RequestParam String ibx) {
-		List<WorkVisitIBXInfo> workVisitCage =  workVisitIBXInfoService.findByIbx(ibx);
+		List<WorkVisitIBXInfo> workVisitCage = workVisitIBXInfoService.findByIbx(ibx);
 		return workVisitCage;
 	}
-	
+
 	@RequestMapping(value = "/getByCage", method = RequestMethod.GET)
 	public List<WorkVisitIBXInfo> findByCage(@RequestParam String cage) {
-		List<WorkVisitIBXInfo> workVisitCage =  workVisitIBXInfoService.findByCage(cage);
+		List<WorkVisitIBXInfo> workVisitCage = workVisitIBXInfoService.findByCage(cage);
 		return workVisitCage;
 	}
 
@@ -51,15 +51,15 @@ public class WorkVisitRestController {
 	public WorkVisit getWorkVisit() {
 		return workVisit;
 	}
-	
+
 	@RequestMapping(value = "/getIBXInfo", method = RequestMethod.GET)
 	public List<WorkVisitIBXInfo> getWorkVisitIBXInfo() {
 		return workVisitIBXInfoService.findAll();
 	}
 
-	@RequestMapping(value = "/postworkvisit", method = RequestMethod.POST)
+	@RequestMapping(value = "/postWorkVisit", method = RequestMethod.POST)
 	public void postWorkVisit(@RequestBody WorkVisit wrkVisit) {
-
+		System.out.println("calling postWorkVisit");
 		return;
 	}
 }

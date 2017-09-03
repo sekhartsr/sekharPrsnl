@@ -8,7 +8,6 @@
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/node_modules/angularjs-datepicker/src/css/angular-datepicker.css" />
-<link rel="stylesheet" href="/node_modules/angularjs-datetime-picker/angularjs-datetime-picker.css" />
 
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js"></script>
@@ -16,7 +15,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="/node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
 <script src="/node_modules/angularjs-datepicker/src/js/angular-datepicker.js"></script>
-<script src="/node_modules/angularjs-datetime-picker/angularjs-datetime-picker.js"></script>
 <script src="/js/workVisitController.js"></script>
 
 </head>
@@ -73,10 +71,10 @@
 								</tr>
 							</thead>
 							<tbody class="well">
-								<tr ng-repeat="visitor in visitors | filter:f" ng-click="wvSelected(visitor);">
+								<tr ng-repeat="visitor in visitors | filter:f" ng-disabled="selVisitors" ng-click="wvSelected(visitor);">
 									<td>{{visitor.firstName}}, {{visitor.lastName}}</td>
 									<td><a id="release" th:href="@{/viewDetails/{{visitor.firstName}}}"><label
-											th:text="'View Details'" /> </a> <span>&nbsp;</span></td>
+											style="border: 1px solid blue;" th:text="'View Details'" /> </a> <span>&nbsp;</span></td>
 								</tr>
 							</tbody>
 						</table>
@@ -91,11 +89,11 @@
 								<th style="display: none;"></th>
 							</tr>
 
-							<!-- <tr ng-repeat="selVisitor in selVisitors"> -->
-							<tr class="well">
+							<tr ng-repeat="selVisitor in selVisitors track by $index">
+							<!-- <tr class="well"> -->
 								<!-- <td>{{ selVisitor.firstName }}</td> -->
-								<td>{{selVisitors.userName}}</td>
-								<td>{{ selVisitors.company }}</td>
+								<td>{{selVisitor.userName}}</td>
+								<td>{{ selVisitor.company }}</td>
 								<td><a id="release" th:href="@{/removeUser/{{selVisitors.lastName}}}"><label
 										th:text="'Remove'" /> </a> <span>&nbsp;</span></td>
 							</tr>

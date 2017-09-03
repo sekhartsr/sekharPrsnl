@@ -1,4 +1,4 @@
-var app = angular.module('app', [ 'ui.utils' ]);
+var app = angular.module('app', [ 'ui.utils', "720kb.datepicker", ]);
 app.controller('postcontroller', function($scope, $http, $location) {
 
 	$scope.options = [ {
@@ -97,14 +97,26 @@ app.controller('postcontroller', function($scope, $http, $location) {
 	 * $scope.subjects = [ { name : "option1", marks : "1" }, { name :
 	 * "option2", marks : "2" }, { name : "option3", marks : "3" } ];
 	 */
-
+	$scope.selVisitors = [];
+	
 	$scope.wvSelected = function(my_visitor) {
-		$scope.selVisitors = my_visitor;
+		$scope.selVisitors.push(my_visitor);
 		console.log($scope.selVisitors);
 	};
 
+	$scope.remove = function() {
+		var newDataList = [];
+		$scope.selectedAll = false;
+		angular.forEach($scope.selVisitors, function(selected) {
+			if (!selected.selected) {
+				newDataList.push(selected);
+			}
+		});
+		$scope.selVisitors = newDataList;
+	};
+
 	$scope.submitForm = function() {
-		var url = $location.absUrl() + "postcustomer";
+		var url = $location.absUrl() + "postWorkVisit";
 
 		var config = {
 			headers : {
@@ -112,8 +124,10 @@ app.controller('postcontroller', function($scope, $http, $location) {
 			}
 		}
 		var data = {
-			firstname : $scope.firstname,
-			lastname : $scope.lastname
+				ibx : $scope.ibx,
+				cage : $scope.cage,
+				cabinet : $scope.cabinet
+//				workVisitUsers : $scope.selVisitors
 		};
 
 		$http.post(url, data, config).then(function(response) {
