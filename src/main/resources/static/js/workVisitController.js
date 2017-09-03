@@ -40,9 +40,9 @@ app.controller('postcontroller', function($scope, $http, $location) {
 	});
 
 	$scope.getCage = function() {
-		if ($scope.ibx != null) {
-			console.log("ibxVal:" + $scope.ibx.ibx);
-			var ibx = $scope.ibx.ibx;
+		if ($scope.wv.ibx != null) {
+			console.log("ibxVal:" + $scope.wv.ibx.ibx);
+			var ibx = $scope.wv.ibx.ibx;
 			var url = $location.absUrl();
 			console.log("Sekhar----1");
 			var config = {
@@ -67,9 +67,9 @@ app.controller('postcontroller', function($scope, $http, $location) {
 	};
 
 	$scope.getCabinet = function() {
-		if ($scope.cage != null) {
-			console.log("CageValue:" + $scope.cage.cage);
-			var cage = $scope.cage.cage;
+		if ($scope.wv.cage != null) {
+			console.log("CageValue:" + $scope.wv.cage.cage);
+			var cage = $scope.wv.cage.cage;
 			var url = $location.absUrl();
 			console.log("Sekhar----1");
 			var config = {
@@ -98,47 +98,66 @@ app.controller('postcontroller', function($scope, $http, $location) {
 	 * "option2", marks : "2" }, { name : "option3", marks : "3" } ];
 	 */
 	$scope.selVisitors = [];
-	
+
 	$scope.wvSelected = function(my_visitor) {
 		$scope.selVisitors.push(my_visitor);
 		console.log($scope.selVisitors);
 	};
 
-	$scope.remove = function() {
+	$scope.remove = function(removeUsr) {
 		var newDataList = [];
+		console.log("Raaaaaaaaaaaaaahul");
 		$scope.selectedAll = false;
 		angular.forEach($scope.selVisitors, function(selected) {
-			if (!selected.selected) {
+			console.log("----"+selected);
+			console.log("--====--"+removeUsr);
+			if (selected != removeUsr) {
 				newDataList.push(selected);
 			}
 		});
 		$scope.selVisitors = newDataList;
 	};
+	
 
 	$scope.submitForm = function() {
 		var url = $location.absUrl() + "postWorkVisit";
-
 		var config = {
 			headers : {
 				'Content-Type' : 'application/json;charset=utf-8;'
 			}
 		}
+		console.log("ibxVal:" + $scope.wv.ibx.ibx);
+		var ibxVal = $scope.wv.ibx.ibx;
+		var cageVal = $scope.wv.cage.cage;
+		var cabinetVal = $scope.wv.cabinet.cabinet;
+
 		var data = {
-				ibx : $scope.ibx,
-				cage : $scope.cage,
-				cabinet : $scope.cabinet
-//				workVisitUsers : $scope.selVisitors
+			ibx : $scope.wv.ibx.ibx,
+			cage : $scope.wv.cage.cage,
+			cabinet : $scope.wv.cabinet.cabinet,
+			workVisitUsers : $scope.selVisitors
 		};
 
+		
+		// switch flag
+		$scope.switchBool = function(value) {
+		   $scope[value] = !$scope[value];
+		};
+		
+		
+		console.log("data:" + data);
 		$http.post(url, data, config).then(function(response) {
 			$scope.postResultMessage = "Sucessful!";
+			$scope.successTextAlert = "Some content";
+			$scope.showSuccessAlert = true;
 		}, function(response) {
 			$scope.postResultMessage = "Fail!";
 		});
 
-		$scope.ibx = "";
-		$scope.cage = "";
-		$scope.cabinet = "";
+		$scope.wv.ibx.ibx = null;
+		$scope.wv.cage.cage = "";
+		$scope.wv.cabinet.cabinet = "";
+		$scope.selVisitors = "";
 	}
 });
 

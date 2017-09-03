@@ -16,6 +16,7 @@ import com.equinix.workvisit.model.WorkVisit;
 import com.equinix.workvisit.model.WorkVisitIBXInfo;
 import com.equinix.workvisit.model.WorkVisitUsers;
 import com.equinix.workvisit.services.WorkVisitIBXInfoService;
+import com.equinix.workvisit.services.WorkVisitService;
 import com.equinix.workvisit.services.WorkVisitUsersService;
 
 @RestController
@@ -26,6 +27,9 @@ public class WorkVisitRestController {
 
 	@Autowired
 	WorkVisitUsersService workVisitUsersService;
+	
+	@Autowired
+	WorkVisitService workVisitService;
 
 	WorkVisit workVisit = new WorkVisit();
 
@@ -58,10 +62,15 @@ public class WorkVisitRestController {
 	public List<WorkVisitIBXInfo> getWorkVisitIBXInfo() {
 		return workVisitIBXInfoService.findAll();
 	}
-
 	@RequestMapping(value = "/postWorkVisit", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public @ResponseBody WorkVisit postWorkVisit(@RequestBody WorkVisit wrkVisit) {
-		System.out.println("calling postWorkVisit");
-		return wrkVisit;
+	public @ResponseBody WorkVisit postWorkVisit(@RequestBody WorkVisit workVisit) {
+		System.out.println("calling postWorkVisitForm Ibx: " +workVisit.getIbx());
+		/*if(workVisit != null){
+			for(WorkVisitUsers workVisitUser : workVisit.getWorkVisitUsers()){
+				workVisit.setWorkVisitUser(workVisitUser.getUserName());
+				workVisitService.create(workVisit);
+			}
+		}*/
+		return workVisit;
 	}
 }

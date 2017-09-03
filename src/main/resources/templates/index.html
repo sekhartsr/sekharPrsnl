@@ -33,7 +33,7 @@
 				<div class="row panel panel-default">
 					<div class="col-sm-4 margin-10">
 						<label><h5 th:text="'IBX'" /></label><span class="required">*</span> <select
-							style="width: auto;" ng-model="ibx" ng-options="o.ibx for o in IbsVals | unique:'ibx'"
+							style="width: auto;" ng-model="wv.ibx" ng-options="o.ibx for o in IbsVals | unique:'ibx'"
 							ng-change="getCage()">
 							<option value="">Select an IBX</option>
 						</select>
@@ -41,7 +41,7 @@
 					</div>
 					<div class="col-sm-4 margin-10">
 						<label><h5 th:text="'Cage/Suite'" /></label><span class="required">*</span> <select
-							style="width: auto;" ng-model="cage" ng-options="o.cage for o in cageList | unique:'cage'"
+							style="width: auto;" ng-model="wv.cage" ng-options="o.cage for o in cageList | unique:'cage'"
 							ng-change="getCabinet()">
 							<option value="">Select a Cage</option>
 						</select>
@@ -49,7 +49,7 @@
 					</div>
 					<div class="col-sm-4 margin-10">
 						<label><h5 th:text="'Cabinets'" /></label><span class="required">*</span> <select
-							style="width: auto;" ng-model="cabinet"
+							style="width: auto;" ng-model="wv.cabinet"
 							ng-options="o.cabinet for o in cabinetList | unique:'cabinet'">
 							<option value="">Select Cabinets</option>
 						</select>
@@ -71,7 +71,8 @@
 								</tr>
 							</thead>
 							<tbody class="well">
-								<tr ng-repeat="visitor in visitors | filter:f" ng-disabled="selVisitors" ng-click="wvSelected(visitor);">
+								<tr ng-repeat="visitor in visitors | filter:f" ng-disabled="selVisitors"
+									ng-click="wvSelected(visitor);">
 									<td>{{visitor.firstName}}, {{visitor.lastName}}</td>
 									<td><a id="release" th:href="@{/viewDetails/{{visitor.firstName}}}"><label
 											style="border: 1px solid blue;" th:text="'View Details'" /> </a> <span>&nbsp;</span></td>
@@ -90,12 +91,13 @@
 							</tr>
 
 							<tr ng-repeat="selVisitor in selVisitors track by $index">
-							<!-- <tr class="well"> -->
+								<!-- <tr class="well"> -->
 								<!-- <td>{{ selVisitor.firstName }}</td> -->
 								<td>{{selVisitor.userName}}</td>
 								<td>{{ selVisitor.company }}</td>
-								<td><a id="release" th:href="@{/removeUser/{{selVisitors.lastName}}}"><label
-										th:text="'Remove'" /> </a> <span>&nbsp;</span></td>
+								<td><a ng-click="remove(selVisitor)"><label th:text="'Remove'" /> </a></td>
+								<!-- <td><a id="release" th:href="@{/removeUser/{{selVisitors.lastName}}}"><label
+										th:text="'Remove'" /> </a> <span>&nbsp;</span></td> -->
 							</tr>
 						</table>
 					</div>
@@ -106,7 +108,7 @@
 							<label><h5 th:text="'Start Date/Time'" /></label><span class="required">*</span>
 							<datepicker date-format="dd-MM-yyyy" selector="form-control">
 							<div class="input-group">
-								<input class="form-control" ng-model="workVisitDetails.startDate"
+								<input class="form-control" ng-model="wv.workVisitDetails.startDate"
 									placeholder="Choose a date" /> <span class="input-group-addon" style="cursor: pointer">
 									<i class="fa fa-calendar-o" aria-hidden="true"></i>
 								</span>
@@ -122,9 +124,9 @@
 							<label><h5 th:text="'End Date/Time'" /></label><span class="required">*</span>
 							<datepicker date-format="dd-MM-yyyy" selector="form-control">
 							<div class="input-group">
-								<input class="form-control" ng-model="workVisitDetails.endDate" placeholder="Choose a date" />
-								<span class="input-group-addon" style="cursor: pointer"> <i
-									class="fa fa-lg fa-calendar"></i>
+								<input class="form-control" ng-model="wv.workVisitDetails.endDate"
+									placeholder="Choose a date" /> <span class="input-group-addon" style="cursor: pointer">
+									<i class="fa fa-lg fa-calendar"></i>
 								</span>
 							</div>
 							</datepicker>
@@ -137,6 +139,11 @@
 				</div>
 				<div class="row" style="position: relative; left: 80%; right: 10%; bottom: 50%;">
 					<label>Request Complete?</label>
+
+					<div class="alert alert-success" ng-show="showSuccessAlert">
+						<button type="button" class="close" data-ng-click="switchBool('showSuccessAlert')">×</button>
+						<strong>Done!</strong> {{successTextAlert}}
+					</div>
 					<button type="submit" class="btn btn-primary">Submit Request</button>
 				</div>
 			</form>
