@@ -2,6 +2,7 @@ package com.equinix.workvisit.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -10,11 +11,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name = "WORK_VISIT")
-public class WorkVisit extends AbstractEntity implements Serializable{
+public class WorkVisit implements Serializable{
 
 	/**
 	 * 
@@ -38,23 +41,39 @@ public class WorkVisit extends AbstractEntity implements Serializable{
 	@Column(name = "WV_USEER")
 	private String workVisitUser;
 	
-	@Column(name = "WV_DTLS")
-	private String workVisitDtls;
+	@Temporal(TemporalType.DATE)
+	@Column(name = "WV_DTLS_START_DT")
+	private Date startDate;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "WV_DTLS_END_DT")
+	private Date endDate;
+	
+	@Column(name = "WV_DTLS_START_TM")
+	private String startTime;
+	
+	@Column(name = "WV_DTLS_END_TM")
+	private String endTime;
+	
+	@Column(name = "CREATE_DATE")
+	private Timestamp createDt;
 
 	@Transient
 	private List<WorkVisitUsers> workVisitUsers;
 	
-	@Transient
-	private List<WorkVisitDetails> workVisitDetails;
-
 	public WorkVisit() {
 	}
 
-	public WorkVisit(String ibx, String cage, String cabinet, List<WorkVisitUsers> workVisitUsers) {
+	public WorkVisit(String ibx, String cage, String cabinet, List<WorkVisitUsers> workVisitUsers, Date startDate, Date endDate, String startTime,  String endTime) {
 		this.ibx = ibx;
 		this.cage = cage;
 		this.cabinet = cabinet;
 		this.workVisitUsers = workVisitUsers;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		
 		// this.workVisitDetails = workVisitDetails;
 	}
 
@@ -133,79 +152,74 @@ public class WorkVisit extends AbstractEntity implements Serializable{
 	}
 
 	/**
-	 * @return the workVisitDtls
+	 * @return the startDate
 	 */
-	public String getWorkVisitDtls() {
-		return workVisitDtls;
+	public Date getStartDate() {
+		return startDate;
 	}
 
 	/**
-	 * @param workVisitDtls the workVisitDtls to set
+	 * @param startDate the startDate to set
 	 */
-	public void setWorkVisitDtls(String workVisitDtls) {
-		this.workVisitDtls = workVisitDtls;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 
 	/**
-	 * @return the workVisitDetails
+	 * @return the endDate
 	 */
-	public List<WorkVisitDetails> getWorkVisitDetails() {
-		return workVisitDetails;
+	public Date getEndDate() {
+		return endDate;
 	}
 
 	/**
-	 * @param workVisitDetails the workVisitDetails to set
+	 * @param endDate the endDate to set
 	 */
-	public void setWorkVisitDetails(List<WorkVisitDetails> workVisitDetails) {
-		this.workVisitDetails = workVisitDetails;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
-	@Override
-	public String getCreateId() {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * @return the startTime
+	 */
+	public String getStartTime() {
+		return startTime;
 	}
 
-	@Override
-	public void setCreateId(String createId) {
-		// TODO Auto-generated method stub
-		
+	/**
+	 * @param startTime the startTime to set
+	 */
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
 	}
 
-	@Override
+	/**
+	 * @return the endTime
+	 */
+	public String getEndTime() {
+		return endTime;
+	}
+
+	/**
+	 * @param endTime the endTime to set
+	 */
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	/**
+	 * @return the createDt
+	 */
 	public Timestamp getCreateDt() {
-		// TODO Auto-generated method stub
-		return null;
+		return createDt;
 	}
 
-	@Override
+	/**
+	 * @param createDt the createDt to set
+	 */
 	public void setCreateDt(Timestamp createDt) {
-		// TODO Auto-generated method stub
-		
+		this.createDt = createDt;
 	}
 
-	@Override
-	public String getUpdateId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setUpdateId(String updateId) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Timestamp getUpdateDt() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setUpdateDt(Timestamp updateDt) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 }

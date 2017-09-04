@@ -1,6 +1,8 @@
 package com.equinix.workvisit.controller;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +29,9 @@ public class WorkVisitRestController {
 
 	@Autowired
 	WorkVisitUsersService workVisitUsersService;
-	
+
 	@Autowired
 	WorkVisitService workVisitService;
-
-	WorkVisit workVisit = new WorkVisit();
 
 	List<WorkVisitUsers> workVisitUsers = new ArrayList<WorkVisitUsers>();
 
@@ -54,23 +54,39 @@ public class WorkVisitRestController {
 	}
 
 	@RequestMapping(value = "/getworkvisit", method = RequestMethod.GET)
-	public WorkVisit getWorkVisit() {
-		return workVisit;
+	public WorkVisit getWorkVisit(String workVisitUser) {
+		return workVisitService.findByUserName(workVisitUser);
 	}
 
 	@RequestMapping(value = "/getIBXInfo", method = RequestMethod.GET)
 	public List<WorkVisitIBXInfo> getWorkVisitIBXInfo() {
 		return workVisitIBXInfoService.findAll();
 	}
-	@RequestMapping(value = "/postWorkVisit", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+
+	@RequestMapping(value = "/postWorkVisit", method = RequestMethod.POST, consumes = {
+			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public @ResponseBody WorkVisit postWorkVisit(@RequestBody WorkVisit workVisit) {
-		System.out.println("calling postWorkVisitForm Ibx: " +workVisit.getIbx());
-		/*if(workVisit != null){
-			for(WorkVisitUsers workVisitUser : workVisit.getWorkVisitUsers()){
-				workVisit.setWorkVisitUser(workVisitUser.getUserName());
-				workVisitService.create(workVisit);
+		System.out.println("calling postWorkVisitForm Ibx: " + workVisit.getStartDate());
+		if (workVisit != null) {
+			for (WorkVisitUsers workVisitUser : workVisit.getWorkVisitUsers()) {
+				WorkVisit wrkVisit = new WorkVisit();
+				wrkVisit.setIbx(workVisit.getIbx());
+				wrkVisit.setCage(workVisit.getCage());
+				wrkVisit.setCabinet(workVisit.getCabinet());
+				wrkVisit.setStartDate(workVisit.getStartDate());
+				wrkVisit.setEndDate(workVisit.getEndDate());
+				wrkVisit.setCreateDt(getSQLTimestamp());
+				wrkVisit.setWorkVisitUser(workVisitUser.getUserName());
+				workVisitService.save(wrkVisit);
 			}
-		}*/
+		}
 		return workVisit;
+	}
+
+	protected Timestamp getSQLTimestamp() {
+		Calendar calendar = Calendar.getInstance();
+		java.util.Date now = calendar.getTime();
+		java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(now.getTime());
+		return currentTimestamp;
 	}
 }

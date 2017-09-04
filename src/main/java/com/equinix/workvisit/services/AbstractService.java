@@ -17,7 +17,7 @@ import com.equinix.workvisit.model.AbstractEntity;
 
 @EnableTransactionManagement(mode=AdviceMode.PROXY,proxyTargetClass=true)
 @Transactional
-public abstract class AbstractService<S extends AbstractEntity,id> implements SimpleDataAccess<S,Integer>{
+public abstract class AbstractService<S extends AbstractEntity,name> implements SimpleDataAccess<S,String>{
 
 	protected static final String HEADER_MESSAGE_ID = "X-Message-Id";
 	protected static final String HEADER_AUTHORIZATION = "Authorization";	

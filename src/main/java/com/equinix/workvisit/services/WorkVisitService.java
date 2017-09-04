@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.equinix.workvisit.GenericRepository;
 import com.equinix.workvisit.model.WorkVisit;
 import com.equinix.workvisit.repositories.WorkVisitRepository;
 
@@ -16,7 +15,7 @@ import com.equinix.workvisit.repositories.WorkVisitRepository;
 @Scope("prototype")
 @Qualifier("wvService")
 @Transactional
-public class WorkVisitService extends AbstractService<WorkVisit, Integer> {
+public class WorkVisitService {
 
 	@Autowired
 	private WorkVisitRepository WorkVisitDao;
@@ -25,15 +24,14 @@ public class WorkVisitService extends AbstractService<WorkVisit, Integer> {
 	public List<WorkVisit> findAll() {
 		return (List<WorkVisit>) WorkVisitDao.findAll();
 	}
-
-	public boolean delete(Integer id) {
-		return super.delete(id);
+	
+	@Transactional(readOnly = true, rollbackFor = Exception.class)
+	public WorkVisit findByUserName(String workVisitUser) {
+		return WorkVisitDao.findByUserName(workVisitUser);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public GenericRepository<WorkVisit> primaryDao() {
-		return (GenericRepository<WorkVisit>) WorkVisitDao;
+	@Transactional(readOnly = false, rollbackFor = Exception.class)
+	public WorkVisit save(WorkVisit workVisit) {
+		return WorkVisitDao.save(workVisit);
 	}
-
 }

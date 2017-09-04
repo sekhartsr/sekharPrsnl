@@ -8,6 +8,7 @@
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/node_modules/angularjs-datepicker/src/css/angular-datepicker.css" />
+<link rel="stylesheet" href="/node_modules/pg-calendar/dist/css/pignose.calendar.min.css" />
 
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js"></script>
@@ -15,6 +16,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="/node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
 <script src="/node_modules/angularjs-datepicker/src/js/angular-datepicker.js"></script>
+<script src="/node_modules/moment/min/moment.min.js"/>
+<script src="/node_modules/pg-calendar/dist/js/pignose.calendar.min.js"/>
 <script src="/js/workVisitController.js"></script>
 
 </head>
@@ -36,8 +39,9 @@
 							style="width: auto;" ng-model="wv.ibx" ng-options="o.ibx for o in IbsVals | unique:'ibx'"
 							ng-change="getCage()">
 							<option value="">Select an IBX</option>
-						</select>
-						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
+						</select> <span ng-show="submitted || workVisitForm.wv.ibx.$dirty"> <span
+							ng-show="workVisitForm.wv.ibx.$error.required">Email is required.</span>
+						</span>
 					</div>
 					<div class="col-sm-4 margin-10">
 						<label><h5 th:text="'Cage/Suite'" /></label><span class="required">*</span> <select
@@ -45,7 +49,6 @@
 							ng-change="getCabinet()">
 							<option value="">Select a Cage</option>
 						</select>
-						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
 					</div>
 					<div class="col-sm-4 margin-10">
 						<label><h5 th:text="'Cabinets'" /></label><span class="required">*</span> <select
@@ -53,7 +56,6 @@
 							ng-options="o.cabinet for o in cabinetList | unique:'cabinet'">
 							<option value="">Select Cabinets</option>
 						</select>
-						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
 					</div>
 				</div>
 				<h4 th:text="'Visitor(s)'" />
@@ -62,18 +64,18 @@
 					users.</p>
 
 				<div class="row">
-					<div class="col-sm-4 margin-10">
+					<div class="col-sm-6 margin-80">
 
-						<table class="table table-hover">
+						<table class="table table-striped table-hover ">
 							<thead>
 								<tr>
 									<td><input ng-model="f.lastName" th:placeholder="'Enter Name'" /></td>
 								</tr>
 							</thead>
-							<tbody class="well">
+							<tbody>
 								<tr ng-repeat="visitor in visitors | filter:f" ng-disabled="selVisitors"
 									ng-click="wvSelected(visitor);">
-									<td>{{visitor.firstName}}, {{visitor.lastName}}</td>
+									<td width="410">{{visitor.firstName}}, {{visitor.lastName}}</td>
 									<td><a id="release" th:href="@{/viewDetails/{{visitor.firstName}}}"><label
 											style="border: 1px solid blue;" th:text="'View Details'" /> </a> <span>&nbsp;</span></td>
 								</tr>
@@ -85,19 +87,16 @@
 						<label><h4 th:text="'Verify Your Selections'" /></label><span class="required">*</span>
 						<table class="table table-striped">
 							<tr>
-								<th>Name</th>
-								<th>Company</th>
-								<th style="display: none;"></th>
+								<th width="300">Name</th>
+								<th width="300">Company</th>
+								<th width="20"></th>
 							</tr>
 
 							<tr ng-repeat="selVisitor in selVisitors track by $index">
 								<!-- <tr class="well"> -->
-								<!-- <td>{{ selVisitor.firstName }}</td> -->
-								<td>{{selVisitor.userName}}</td>
-								<td>{{ selVisitor.company }}</td>
-								<td><a ng-click="remove(selVisitor)"><label th:text="'Remove'" /> </a></td>
-								<!-- <td><a id="release" th:href="@{/removeUser/{{selVisitors.lastName}}}"><label
-										th:text="'Remove'" /> </a> <span>&nbsp;</span></td> -->
+								<td width="300">{{selVisitor.userName}}</td>
+								<td width="300">{{ selVisitor.company }}</td>
+								<td width="20"><a ng-click="remove(selVisitor)"><label th:text="'Remove'" /> </a></td>
 							</tr>
 						</table>
 					</div>
@@ -106,33 +105,26 @@
 					<div class="form-group">
 						<div class="col-md-4">
 							<label><h5 th:text="'Start Date/Time'" /></label><span class="required">*</span>
-							<datepicker date-format="dd-MM-yyyy" selector="form-control">
 							<div class="input-group">
-								<input class="form-control" ng-model="wv.workVisitDetails.startDate"
-									placeholder="Choose a date" /> <span class="input-group-addon" style="cursor: pointer">
-									<i class="fa fa-calendar-o" aria-hidden="true"></i>
+								<input class="form-control calendar" ng-model="wv.startDate" placeholder="Choose a date" /> <span
+									class="input-group-addon" style="cursor: pointer"> <i class="fa fa-calendar-o"
+									aria-hidden="true"></i>
 								</span>
 							</div>
-							</datepicker>
-
-							<!-- <input type="date" ng-model="user.dob" name="dob" ng-required="true" class="form-control" /> -->
-							<!-- <p ng-show="userForm.dob.$error.required && (userForm.$submitted || userForm.dob.$dirty)"
-								class="text-danger">Please Enter DOB.</p> -->
+							<div class="input-group">
+								<input type="text" id="pickTime" ng-model="wv.startTime" placeholder="Choose a Time" />
+							</div>
 						</div>
 
 						<div class="col-md-4">
 							<label><h5 th:text="'End Date/Time'" /></label><span class="required">*</span>
-							<datepicker date-format="dd-MM-yyyy" selector="form-control">
+							<datepicker date-format="yyyy-MM-dd" selector="form-control">
 							<div class="input-group">
-								<input class="form-control" ng-model="wv.workVisitDetails.endDate"
-									placeholder="Choose a date" /> <span class="input-group-addon" style="cursor: pointer">
-									<i class="fa fa-lg fa-calendar"></i>
+								<input class="form-control" ng-model="wv.endDate" placeholder="Choose a date" /> <span
+									class="input-group-addon" style="cursor: pointer"> <i class="fa fa-lg fa-calendar"></i>
 								</span>
 							</div>
 							</datepicker>
-							<!-- <input type="date" ng-model="user.dob" name="dob" ng-required="true" class="form-control" /> -->
-							<!-- <p ng-show="userForm.dob.$error.required && (userForm.$submitted || userForm.dob.$dirty)"
-								class="text-danger">Please Enter DOB.</p> -->
 						</div>
 
 					</div>
@@ -187,3 +179,21 @@ tr[ng-click] {
 	cursor: pointer;
 }
 </style>
+<script>
+$(function() {
+	var yDate = new Date();
+	yDate.setDate(yDate.getDate() - 1);
+	$('.calendar').pignoseCalendar({
+		toggle : false,
+		modal: false,
+		format : 'DD/MM/YYYY', // date format string. (2017-02-02)
+		minDate : yDate,
+		disabledWeekdays: [0, 6], // SUN (0), SAT (6)
+		theme : 'light', // light, dark
+	});
+});
+
+$('#pickTime').timepicker({ 'scrollDefault': 'now' });
+$('#pickTime2').timepicker({ 'timeFormat': 'h:i A' });
+
+</script>
