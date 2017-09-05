@@ -2,7 +2,7 @@ var app = angular.module('app', [ 'ui.utils', "720kb.datepicker", 'moment-picker
 app.controller('postcontroller',
 	function($scope, $rootScope, $http, $location) {
 
-	// Get all the visitors and IBX List for Select IBX OnLoad from DB
+		// Get all the visitors and IBX List for Select IBX OnLoad from DB
 		$scope.$watch('$viewContentLoaded', function() {
 			var url = $location.absUrl();
 			var config = {
@@ -25,11 +25,11 @@ app.controller('postcontroller',
 				$scope.getResultMessage = "Fail!";
 			});
 		});
-		
-// get Cage List when select value of IBX  (ng-change)
+
+		// get Cage List when select value of IBX  (ng-change)
 		$scope.getCage = function() {
-			if ($scope.wv.ibx != null) {
-				var ibx = $scope.wv.ibx.ibx;
+			if ($scope.ibx != null) {
+				var ibx = $scope.ibx.ibx;
 				var url = $location.absUrl();
 				var config = {
 					headers : {
@@ -51,10 +51,10 @@ app.controller('postcontroller',
 			}
 		};
 
-//		get Cabinet List when select value of Cage (ng-change)
+		//		get Cabinet List when select value of Cage (ng-change)
 		$scope.getCabinet = function() {
-			if ($scope.wv.cage != null) {
-				var cage = $scope.wv.cage.cage;
+			if ($scope.cage != null) {
+				var cage = $scope.cage.cage;
 				var url = $location.absUrl();
 				var config = {
 					headers : {
@@ -75,18 +75,31 @@ app.controller('postcontroller',
 				$scope.cabinetList = null;
 			}
 		};
-		
-//		min Date to select StartDate
+
+		//		min Date to select StartDate
 		$scope.minDateString = moment().subtract(0, 'day').format('YYYY/MM/DD');
 
+		//		min Date to select End Date
+		
+		$scope.endDateSet = function() {
+			var diffDays;
+			console.log("endDate----1");
+			var startDate = new Date($scope.startDate);
+			console.log("endDate----2" + startDate);
+			console.log("endDate----2a");
+			diffDays = startDate.diff(new Date(), 'days');
+			console.log("endDate----3" + diffDays);
+			$scope.minEndDateString = moment().subtract(diffDays, 'day').format('YYYY/MM/DD');
+			console.log("endDate----4" + $scope.minEndDateString);
+		}
 		// disable all Sundays in the Month View
 		/*		isSelectable = function(date, type) {
 					return type != 'day' || date.format('dddd') != 'Sunday';
 				};
 		 */
-		
-		
-//		select visitor from the list of visitors
+
+
+		//		select visitor from the list of visitors
 		$scope.selVisitors = [];
 		$scope.wvSelected = function(my_visitor) {
 			$scope.selVisitors.push(my_visitor);
@@ -94,7 +107,7 @@ app.controller('postcontroller',
 			$scope.visitors.splice(index, 1);
 		};
 
-//		remove from the list of Specified
+		//		remove from the list of Specified
 		$scope.remove = function(removeUsr) {
 			var newDataList = [];
 			$scope.selectedAll = false;
@@ -124,33 +137,39 @@ app.controller('postcontroller',
 				}
 			}
 
-			var startDate = new Date($scope.wv.startDate);
-			var endDate = new Date($scope.wv.endDate);
+			if ($scope.workVisitForm.$valid) {
 
-			var data = {
-				ibx : $scope.wv.ibx.ibx,
-				cage : $scope.wv.cage.cage,
-				cabinet : $scope.wv.cabinet.cabinet,
-				workVisitUsers : $scope.selVisitors,
-				startDate : startDate,
-				endDate : endDate,
-				startTime : $scope.wv.startTime,
-				endTime : $scope.wv.endTime
-			};
+				alert("ibx: " + $scope.cage.cage);
+				var startDate = new Date($scope.startDate);
+				var endDate = new Date($scope.endDate);
 
-			// switch flag
-			$scope.switchBool = function(value) {
-				$scope[value] = !$scope[value];
-			};
+				var data = {
+					ibx : $scope.ibx.ibx,
+					cage : $scope.cage.cage,
+					cabinet : $scope.cabinet.cabinet,
+					workVisitUsers : $scope.selVisitors,
+					startDate : startDate,
+					endDate : endDate,
+					startTime : $scope.startTime,
+					endTime : $scope.endTime
+				};
 
-			$http.post(url, data, config).then(function(response) {
-				$scope.postResultMessage = "Sucessful!";
-				$scope.successTextAlert = "Some content";
-				$scope.showSuccessAlert = true;
-				window.location.reload();
-			}, function(response) {
-				$scope.postResultMessage = "Fail!";
-			});
+				// switch flag
+				$scope.switchBool = function(value) {
+					window.location.reload();
+				};
+
+				$http.post(url, data, config).then(function(response) {
+					$scope.successTextAlert = "Form submitted successfully";
+					$scope.successMessage = "Form submitted successfully";
+					$scope.showSuccessAlert = true;
+				//				window.location.reload();
+				}, function(response) {
+					$scope.postResultMessage = "Fail!";
+				});
+			} else {
+				console.log("Validation Failed---------------");
+			}
 
 		/*
 		 * $scope.wv.ibx.ibx = null; $scope.wv.cage.cage = "";

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-	xmlns:tiles="http://www.thymeleaf.org">
+<html ng-app="app" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -24,41 +23,50 @@
 
 </head>
 <body>
-	<div class="container" style="border:1px solid #cecece;"  ng-app="app">
+	<div class="container" style="border: 1px solid #cecece;">
 		<div class="col-sm-12" ng-controller="postcontroller">
-			<form name="workVisitForm" ng-submit="submitForm()">
+			<form name="workVisitForm" ng-submit="submitForm(workVisitForm.$valid)" novalidate="true">
+
+				<div class="alert alert-success" ng-show="showSuccessAlert">
+					<button type="button" class="close" data-ng-click="switchBool('showSuccessAlert')">×</button>
+					<strong>Done!</strong> {{successTextAlert}}
+				</div>
+
+
 				<!-- <label>FirstName</label> <input type="text" name="firstname" class="form-control" ng-model="firstname" /> <input type="text" name="lastname" class="form-control"
 					ng-model="lastname" /> -->
 				<h4 th:text="'WORK VISIT'" />
-				<p>Schedule a Work Visit by providing the IBX and Cage you will need access to the dates and times of the visit
-					and some basic information about the visitors who will be arriving at the site.</p>
+				<p>Schedule a Work Visit by providing the IBX and Cage you will need access to the dates and times of the visit and some basic information about the visitors who
+					will be arriving at the site.</p>
 				<h4 th:text="'IBX Information'" />
 
 				<div class="row panel panel-default">
 					<div class="col-sm-4 margin-10">
-						<label><h5 th:text="'IBX'" /></label><span class="required">*</span> <select style="width: auto;"
-							ng-model="wv.ibx" ng-options="o.ibx for o in IbsVals | unique:'ibx'" ng-change="getCage()">
+						<label><h5 th:text="'IBX'" /></label><span class="required">*</span> <select style="width: auto;" ng-model="ibx" name="ibx"
+							ng-options="o.ibx for o in IbsVals | unique:'ibx'" ng-change="getCage()" ng-required="true">
 							<option value="">Select an IBX</option>
-						</select> <span ng-show="submitted || workVisitForm.wv.ibx.$dirty"> <span
-							ng-show="workVisitForm.wv.ibx.$error.required">Email is required.</span>
-						</span>
+						</select>
+						<p ng-show="workVisitForm.ibx.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.ibx.$dirty)" class="text-danger">Please Select IBX</p>
 					</div>
 					<div class="col-sm-4 margin-10">
-						<label><h5 th:text="'Cage/Suite'" /></label><span class="required">*</span> <select style="width: auto;"
-							ng-model="wv.cage" ng-options="o.cage for o in cageList | unique:'cage'" ng-change="getCabinet()">
+						<label><h5 th:text="'Cage/Suite'" /></label><span class="required">*</span> <select style="width: auto;" ng-model="cage" name="cage"
+							ng-options="o.cage for o in cageList | unique:'cage'" ng-change="getCabinet()" ng-required="true">
 							<option value="">Select a Cage</option>
 						</select>
+						<p ng-show="workVisitForm.cage.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.cage.$dirty)" class="text-danger">Please Select Cage</p>
 					</div>
 					<div class="col-sm-4 margin-10">
-						<label><h5 th:text="'Cabinets'" /></label><span class="required">*</span> <select style="width: auto;"
-							ng-model="wv.cabinet" ng-options="o.cabinet for o in cabinetList | unique:'cabinet'">
+						<label><h5 th:text="'Cabinets'" /></label><span class="required">*</span> <select style="width: auto;" ng-model="cabinet" name="cabinet"
+							ng-options="o.cabinet for o in cabinetList | unique:'cabinet'" ng-required="true">
 							<option value="">Select Cabinets</option>
 						</select>
+						<p ng-show="workVisitForm.cabinet.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.cabinet.$dirty)" class="text-danger">Please Select
+							Cabinet</p>
 					</div>
 				</div>
 				<h4 th:text="'Visitor(s)'" />
-				<p>Please select the users that will be visiting the IBX by checking the box next to their name. User details
-					can be viewed by expanding theri list entry. Search by last name to locate users.</p>
+				<p>Please select the users that will be visiting the IBX by checking the box next to their name. User details can be viewed by expanding theri list entry. Search
+					by last name to locate users.</p>
 
 				<div class="row">
 					<div class="col-sm-6 margin-80">
@@ -72,12 +80,10 @@
 							<tbody>
 								<tr ng-repeat="visitor in visitors | filter:f" ng-disabled="selVisitors" ng-click="wvSelected(visitor);">
 									<td width="410">{{visitor.firstName}}, {{visitor.lastName}}</td>
-									<td><a id="release" th:href="@{/viewDetails/{{visitor.firstName}}}"><label
-											style="border: 1px solid blue;" th:text="'View Details'" /> </a> <span>&nbsp;</span></td>
+									<td><a id="release" th:href="@{/viewDetails/{{visitor.firstName}}}"><label style="border: 1px solid blue;" th:text="'View Details'" /> </a> <span>&nbsp;</span></td>
 								</tr>
 							</tbody>
 						</table>
-						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
 					</div>
 					<div class="col-sm-6 margin-10">
 						<p>
@@ -101,41 +107,44 @@
 								<td width="20"><a ng-click="remove(selVisitor)"><label th:text="'Remove'" /> </a></td>
 							</tr>
 						</table>
+						<p ng-show="!selVisitors.length &amp;&amp; (workVisitForm.$submitted)" class="text-danger">Please Verify your selection</p>
 					</div>
 				</div>
 				<div class="row">
 					<div class="form-group">
 						<div class="col-md-4">
 							<label><h5 th:text="'Start Date/Time'" /></label><span class="required">*</span>
-							<div class="input-group" moment-picker="wv.startDate" min-date="minDateString" today="true" start-view="month"
-								format="YYYY/MM/DD">
+							<div class="input-group" moment-picker="startDate" min-date="minDateString" today="true" start-view="month" format="YYYY/MM/DD">
 								<span class="input-group-addon"> <i class="octicon octicon-calendar"></i>
-								</span> <input class="form-control" placeholder="Select a date" ng-model="wv.startDate"
-									ng-model-options="{ updateOn: 'blur' }" />
+								</span> <input class="form-control" placeholder="Select a date" ng-model="startDate" name="startDate"
+									ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
 							</div>
-
-							<div class="input-group" moment-picker="wv.startTime" format="LT">
+							<p ng-show="workVisitForm.startDate.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.startDate.$dirty)" class="text-danger">Please Select
+								Start Date</p>
+							<div class="input-group" moment-picker="startTime" format="LT">
 								<span class="input-group-addon"> <i class="octicon octicon-clock"></i>
-								</span> <input class="form-control" placeholder="Select a time" ng-model="wv.startTime"
-									ng-model-options="{ updateOn: 'blur' }" />
+								</span> <input class="form-control" placeholder="Select a time" ng-model="startTime" name="startTime" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
 							</div>
+							<p ng-show="workVisitForm.startTime.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.startTime.$dirty)" class="text-danger">Please Select
+								Start Time</p>
 						</div>
 
 						<div class="col-md-4">
 							<label><h5 th:text="'End Date/Time'" /></label><span class="required">*</span>
 
-							<div class="input-group" moment-picker="wv.endDate" min-date="minDateString" today="true" start-view="month"
-								format="YYYY/MM/DD">
+							<div class="input-group" moment-picker="endDate" min-date="minEndDateString" today="true" start-view="month" format="YYYY/MM/DD">
 								<span class="input-group-addon"> <i class="octicon octicon-calendar"></i>
-								</span> <input class="form-control" placeholder="Select a date" ng-model="wv.endDate"
-									ng-model-options="{ updateOn: 'blur' }" />
+								</span> <input class="form-control" placeholder="Select a date" ng-model="endDate" name="endDate" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
 							</div>
+							<p ng-show="workVisitForm.endDate.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.endDate.$dirty)" class="text-danger">Please Select End
+								Date</p>
 
-							<div class="input-group" moment-picker="wv.endTime" format="LT">
+							<div class="input-group" moment-picker="endTime" format="LT">
 								<span class="input-group-addon"> <i class="octicon octicon-clock"></i>
-								</span> <input class="form-control" placeholder="Select a time" ng-model="wv.endTime"
-									ng-model-options="{ updateOn: 'blur' }" />
+								</span> <input class="form-control" placeholder="Select a time" ng-model="endTime" name="endTime" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
 							</div>
+							<p ng-show="workVisitForm.endTime.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.endTime.$dirty)" class="text-danger">Please Select End
+								Time</p>
 
 							<!-- <datepicker date-format="yyyy-MM-dd" selector="form-control">
 							<div class="input-group">
@@ -151,10 +160,6 @@
 				<div class="row" style="position: relative; left: 80%; right: 10%; bottom: 50%;">
 					<label>Request Complete?</label>
 
-					<div class="alert alert-success" ng-show="showSuccessAlert">
-						<button type="button" class="close" data-ng-click="switchBool('showSuccessAlert')">×</button>
-						<strong>Done!</strong> {{successTextAlert}}
-					</div>
 					<button type="submit" class="btn btn-primary">Submit Request</button>
 				</div>
 			</form>
@@ -173,7 +178,9 @@ input[type=text], select {
 	box-sizing: border-box;
 }
 
-p.ridge {border-style: ridge;}
+p.ridge {
+	border-style: ridge;
+}
 
 .required {
 	color: red;
@@ -204,8 +211,11 @@ thead {
 tr[ng-click] {
 	cursor: pointer;
 }
-</style>
-<script>
 
+.error-messages {
+	color: red;
+}
+</style>
+<script language="JavaScript" type="text/javascript">
 
 </script>
