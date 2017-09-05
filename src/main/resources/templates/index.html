@@ -2,79 +2,75 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
 	xmlns:tiles="http://www.thymeleaf.org">
 <head>
-<title>Work Visit</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Work Visit</title>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/node_modules/angularjs-datepicker/src/css/angular-datepicker.css" />
-<link rel="stylesheet" href="/node_modules/pg-calendar/dist/css/pignose.calendar.min.css" />
+<link rel="stylesheet" href="/node_modules/angular-moment-picker/dist/angular-moment-picker.min.css" />
 
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
 <script src="/node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
 <script src="/node_modules/angularjs-datepicker/src/js/angular-datepicker.js"></script>
-<script src="/node_modules/moment/min/moment.min.js"/>
-<script src="/node_modules/pg-calendar/dist/js/pignose.calendar.min.js"/>
+<script src="/node_modules/moment/min/moment.min.js"></script>
+<script src="/node_modules/angular-moment-picker/dist/angular-moment-picker.min.js"></script>
 <script src="/js/workVisitController.js"></script>
 
 </head>
 <body>
-	<div class="container" ng-app="app">
+	<div class="container" style="border:1px solid #cecece;"  ng-app="app">
 		<div class="col-sm-12" ng-controller="postcontroller">
 			<form name="workVisitForm" ng-submit="submitForm()">
 				<!-- <label>FirstName</label> <input type="text" name="firstname" class="form-control" ng-model="firstname" /> <input type="text" name="lastname" class="form-control"
 					ng-model="lastname" /> -->
 				<h4 th:text="'WORK VISIT'" />
-				<p>Schedule a Work Visit by providing the IBX and Cage you will need access to the dates and
-					times of the visit and some basic information about the visitors who will be arriving at the
-					site.</p>
+				<p>Schedule a Work Visit by providing the IBX and Cage you will need access to the dates and times of the visit
+					and some basic information about the visitors who will be arriving at the site.</p>
 				<h4 th:text="'IBX Information'" />
 
 				<div class="row panel panel-default">
 					<div class="col-sm-4 margin-10">
-						<label><h5 th:text="'IBX'" /></label><span class="required">*</span> <select
-							style="width: auto;" ng-model="wv.ibx" ng-options="o.ibx for o in IbsVals | unique:'ibx'"
-							ng-change="getCage()">
+						<label><h5 th:text="'IBX'" /></label><span class="required">*</span> <select style="width: auto;"
+							ng-model="wv.ibx" ng-options="o.ibx for o in IbsVals | unique:'ibx'" ng-change="getCage()">
 							<option value="">Select an IBX</option>
 						</select> <span ng-show="submitted || workVisitForm.wv.ibx.$dirty"> <span
 							ng-show="workVisitForm.wv.ibx.$error.required">Email is required.</span>
 						</span>
 					</div>
 					<div class="col-sm-4 margin-10">
-						<label><h5 th:text="'Cage/Suite'" /></label><span class="required">*</span> <select
-							style="width: auto;" ng-model="wv.cage" ng-options="o.cage for o in cageList | unique:'cage'"
-							ng-change="getCabinet()">
+						<label><h5 th:text="'Cage/Suite'" /></label><span class="required">*</span> <select style="width: auto;"
+							ng-model="wv.cage" ng-options="o.cage for o in cageList | unique:'cage'" ng-change="getCabinet()">
 							<option value="">Select a Cage</option>
 						</select>
 					</div>
 					<div class="col-sm-4 margin-10">
-						<label><h5 th:text="'Cabinets'" /></label><span class="required">*</span> <select
-							style="width: auto;" ng-model="wv.cabinet"
-							ng-options="o.cabinet for o in cabinetList | unique:'cabinet'">
+						<label><h5 th:text="'Cabinets'" /></label><span class="required">*</span> <select style="width: auto;"
+							ng-model="wv.cabinet" ng-options="o.cabinet for o in cabinetList | unique:'cabinet'">
 							<option value="">Select Cabinets</option>
 						</select>
 					</div>
 				</div>
 				<h4 th:text="'Visitor(s)'" />
-				<p>Please select the users that will be visiting the IBX by checking the box next to their
-					name. User details can be viewed by expanding theri list entry. Search by last name to locate
-					users.</p>
+				<p>Please select the users that will be visiting the IBX by checking the box next to their name. User details
+					can be viewed by expanding theri list entry. Search by last name to locate users.</p>
 
 				<div class="row">
 					<div class="col-sm-6 margin-80">
 
-						<table class="table table-striped table-hover ">
+						<table class="table table-condensed table-hover">
 							<thead>
 								<tr>
 									<td><input ng-model="f.lastName" th:placeholder="'Enter Name'" /></td>
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="visitor in visitors | filter:f" ng-disabled="selVisitors"
-									ng-click="wvSelected(visitor);">
+								<tr ng-repeat="visitor in visitors | filter:f" ng-disabled="selVisitors" ng-click="wvSelected(visitor);">
 									<td width="410">{{visitor.firstName}}, {{visitor.lastName}}</td>
 									<td><a id="release" th:href="@{/viewDetails/{{visitor.firstName}}}"><label
 											style="border: 1px solid blue;" th:text="'View Details'" /> </a> <span>&nbsp;</span></td>
@@ -84,7 +80,13 @@
 						<!-- <p class="errors" th:if="${#fields.hasErrors('sector')}" th:errors="*{sector}" /> -->
 					</div>
 					<div class="col-sm-6 margin-10">
-						<label><h4 th:text="'Verify Your Selections'" /></label><span class="required">*</span>
+						<p>
+						<h4>
+							Verify Your Selections <a href="#"> <span class="glyphicon glyphicon-exclamation-sign"></span>
+							</a>
+						</h4>
+						</p>
+						<!-- <label><h4 th:text="'Verify Your Selections'" /> <span class="glyphicon glyphicon-exclamation-sign"></span></label> -->
 						<table class="table table-striped">
 							<tr>
 								<th width="300">Name</th>
@@ -105,26 +107,43 @@
 					<div class="form-group">
 						<div class="col-md-4">
 							<label><h5 th:text="'Start Date/Time'" /></label><span class="required">*</span>
-							<div class="input-group">
-								<input class="form-control calendar" ng-model="wv.startDate" placeholder="Choose a date" /> <span
-									class="input-group-addon" style="cursor: pointer"> <i class="fa fa-calendar-o"
-									aria-hidden="true"></i>
-								</span>
+							<div class="input-group" moment-picker="wv.startDate" min-date="minDateString" today="true" start-view="month"
+								format="YYYY/MM/DD">
+								<span class="input-group-addon"> <i class="octicon octicon-calendar"></i>
+								</span> <input class="form-control" placeholder="Select a date" ng-model="wv.startDate"
+									ng-model-options="{ updateOn: 'blur' }" />
 							</div>
-							<div class="input-group">
-								<input type="text" id="pickTime" ng-model="wv.startTime" placeholder="Choose a Time" />
+
+							<div class="input-group" moment-picker="wv.startTime" format="LT">
+								<span class="input-group-addon"> <i class="octicon octicon-clock"></i>
+								</span> <input class="form-control" placeholder="Select a time" ng-model="wv.startTime"
+									ng-model-options="{ updateOn: 'blur' }" />
 							</div>
 						</div>
 
 						<div class="col-md-4">
 							<label><h5 th:text="'End Date/Time'" /></label><span class="required">*</span>
-							<datepicker date-format="yyyy-MM-dd" selector="form-control">
+
+							<div class="input-group" moment-picker="wv.endDate" min-date="minDateString" today="true" start-view="month"
+								format="YYYY/MM/DD">
+								<span class="input-group-addon"> <i class="octicon octicon-calendar"></i>
+								</span> <input class="form-control" placeholder="Select a date" ng-model="wv.endDate"
+									ng-model-options="{ updateOn: 'blur' }" />
+							</div>
+
+							<div class="input-group" moment-picker="wv.endTime" format="LT">
+								<span class="input-group-addon"> <i class="octicon octicon-clock"></i>
+								</span> <input class="form-control" placeholder="Select a time" ng-model="wv.endTime"
+									ng-model-options="{ updateOn: 'blur' }" />
+							</div>
+
+							<!-- <datepicker date-format="yyyy-MM-dd" selector="form-control">
 							<div class="input-group">
 								<input class="form-control" ng-model="wv.endDate" placeholder="Choose a date" /> <span
 									class="input-group-addon" style="cursor: pointer"> <i class="fa fa-lg fa-calendar"></i>
 								</span>
 							</div>
-							</datepicker>
+							</datepicker> -->
 						</div>
 
 					</div>
@@ -144,11 +163,17 @@
 </body>
 </html>
 <style>
-.select {
-	padding-right: 25px;
-	background-image: url(...);
-	background-position: right top;
+input[type=text], select {
+	width: 100%;
+	padding: 10px 0;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
 }
+
+p.ridge {border-style: ridge;}
 
 .required {
 	color: red;
@@ -169,6 +194,7 @@ tbody {
 	width: 100%;
 	overflow: auto;
 	width: 100%;
+	border: 1px solid #ccc;
 }
 
 thead {
@@ -180,20 +206,6 @@ tr[ng-click] {
 }
 </style>
 <script>
-$(function() {
-	var yDate = new Date();
-	yDate.setDate(yDate.getDate() - 1);
-	$('.calendar').pignoseCalendar({
-		toggle : false,
-		modal: false,
-		format : 'DD/MM/YYYY', // date format string. (2017-02-02)
-		minDate : yDate,
-		disabledWeekdays: [0, 6], // SUN (0), SAT (6)
-		theme : 'light', // light, dark
-	});
-});
 
-$('#pickTime').timepicker({ 'scrollDefault': 'now' });
-$('#pickTime2').timepicker({ 'timeFormat': 'h:i A' });
 
 </script>

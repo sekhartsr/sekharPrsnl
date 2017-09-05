@@ -75,6 +75,8 @@ public class WorkVisitRestController {
 				wrkVisit.setCabinet(workVisit.getCabinet());
 				wrkVisit.setStartDate(workVisit.getStartDate());
 				wrkVisit.setEndDate(workVisit.getEndDate());
+				wrkVisit.setStartTime(workVisit.getStartTime());
+				wrkVisit.setEndTime(workVisit.getEndTime());
 				wrkVisit.setCreateDt(getSQLTimestamp());
 				wrkVisit.setWorkVisitUser(workVisitUser.getUserName());
 				workVisitService.save(wrkVisit);
