@@ -80,7 +80,7 @@ app.controller('postcontroller',
 		$scope.minDateString = moment().subtract(0, 'day').format('YYYY/MM/DD');
 
 		//		min Date to select End Date
-		
+
 		$scope.endDateSet = function() {
 			var diffDays;
 			console.log("endDate----1");
@@ -92,6 +92,7 @@ app.controller('postcontroller',
 			$scope.minEndDateString = moment().subtract(diffDays, 'day').format('YYYY/MM/DD');
 			console.log("endDate----4" + $scope.minEndDateString);
 		}
+		$scope.minEndDateString = moment().subtract(0, 'day').format('YYYY/MM/DD');
 		// disable all Sundays in the Month View
 		/*		isSelectable = function(date, type) {
 					return type != 'day' || date.format('dddd') != 'Sunday';
