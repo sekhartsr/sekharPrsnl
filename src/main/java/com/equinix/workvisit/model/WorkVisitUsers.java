@@ -9,6 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * @author Sekhar
+ *
+ */
 @Entity
 @Table(name="WORK_VISIT_USERS")
 public class WorkVisitUsers implements Serializable{

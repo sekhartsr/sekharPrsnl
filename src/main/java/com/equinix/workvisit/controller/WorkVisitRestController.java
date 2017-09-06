@@ -22,6 +22,10 @@ import com.equinix.workvisit.services.WorkVisitIBXInfoService;
 import com.equinix.workvisit.services.WorkVisitService;
 import com.equinix.workvisit.services.WorkVisitUsersService;
 
+/**
+ * @author Sekhar
+ *
+ */
 @RestController
 public class WorkVisitRestController {
 

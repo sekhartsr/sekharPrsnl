@@ -11,6 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.equinix.workvisit.model.WorkVisitUsers;
 import com.equinix.workvisit.repositories.WorkVisitUsersRepository;
 
+/**
+ * @author Sekhar
+ *
+ */
 @Service("wvUsersService")
 @Scope("prototype")
 @Qualifier("wvUsersService")
