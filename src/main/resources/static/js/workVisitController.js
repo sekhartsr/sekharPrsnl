@@ -1,6 +1,6 @@
-var app = angular.module('app', [ 'ui.utils', "720kb.datepicker", 'moment-picker' ]);
+var app = angular.module('app', [ 'ui.utils', 'moment-picker' ]);
 app.controller('postcontroller',
-	function($scope, $rootScope, $http, $location) {
+	function($scope, $rootScope, $timeout, $http, $location) {
 
 		// Get all the visitors and IBX List for Select IBX OnLoad from DB
 		$scope.$watch('$viewContentLoaded', function() {
@@ -80,25 +80,13 @@ app.controller('postcontroller',
 		$scope.minDateString = moment().subtract(0, 'day').format('YYYY/MM/DD');
 
 		//		min Date to select End Date
-
 		$scope.endDateSet = function() {
 			var diffDays;
-			console.log("endDate----1");
 			var startDate = new Date($scope.startDate);
-			console.log("endDate----2" + startDate);
-			console.log("endDate----2a");
 			diffDays = startDate.diff(new Date(), 'days');
-			console.log("endDate----3" + diffDays);
 			$scope.minEndDateString = moment().subtract(diffDays, 'day').format('YYYY/MM/DD');
-			console.log("endDate----4" + $scope.minEndDateString);
 		}
 		$scope.minEndDateString = moment().subtract(0, 'day').format('YYYY/MM/DD');
-		// disable all Sundays in the Month View
-		/*		isSelectable = function(date, type) {
-					return type != 'day' || date.format('dddd') != 'Sunday';
-				};
-		 */
-
 
 		//		select visitor from the list of visitors
 		$scope.selVisitors = [];
@@ -125,7 +113,6 @@ app.controller('postcontroller',
 				}
 			});
 			$scope.visitors.splice(removeIndx, 0, removeUsr);
-		// $scope.visitors.push(removeUsr);
 		};
 
 		//		Submit the form and call to backend service to store the data
@@ -139,60 +126,60 @@ app.controller('postcontroller',
 			}
 
 			if ($scope.workVisitForm.$valid) {
-
-				alert("ibx: " + $scope.cage.cage);
 				var startDate = new Date($scope.startDate);
 				var endDate = new Date($scope.endDate);
+				if (startDate > endDate) {
+					$scope.endDateValid = true;
+					$scope.errMessage = 'End Date should be greate than start date';
+					return false;
+				}
+				if (confirm("Do u want to continue?")) {
+					var data = {
+						ibx : $scope.ibx.ibx,
+						cage : $scope.cage.cage,
+						cabinet : $scope.cabinet.cabinet,
+						workVisitUsers : $scope.selVisitors,
+						startDate : startDate,
+						endDate : endDate,
+						startTime : $scope.startTime,
+						endTime : $scope.endTime
+					};
 
-				var data = {
-					ibx : $scope.ibx.ibx,
-					cage : $scope.cage.cage,
-					cabinet : $scope.cabinet.cabinet,
-					workVisitUsers : $scope.selVisitors,
-					startDate : startDate,
-					endDate : endDate,
-					startTime : $scope.startTime,
-					endTime : $scope.endTime
-				};
+					$http.post(url, data, config).then(function(response) {
+						$scope.postResultMessage = "Successfully Submitted Visitor(s)";
+						$scope.showSuccessAlert = true;
+						$timeout(function() {
+							$scope.showSuccessAlert = true;
+							window.location.reload();
+						}, 5000);
+					}, function(response) {
+						$scope.postResultMessage = "Fail!";
+					});
+				} else {
 
-				// switch flag
-				$scope.switchBool = function(value) {
-					window.location.reload();
-				};
-
-				$http.post(url, data, config).then(function(response) {
-					$scope.successTextAlert = "Form submitted successfully";
-					$scope.successMessage = "Form submitted successfully";
-					$scope.showSuccessAlert = true;
-				//				window.location.reload();
-				}, function(response) {
-					$scope.postResultMessage = "Fail!";
-				});
+				}
 			} else {
 				console.log("Validation Failed---------------");
+				return false;
 			}
-
-		/*
-		 * $scope.wv.ibx.ibx = null; $scope.wv.cage.cage = "";
-		 * $scope.wv.cabinet.cabinet = ""; $scope.selVisitors = "";
-		 */
 		}
+
+		$scope.reloadPage = function() {
+			window.location.reload();
+		}
+
+		$scope.getfunction = function(visitor) {
+			var lastName = visitor.lastName;
+			$scope.visitorView = visitor;
+			$rootScope.$broadcast('viewVisitorShar', $scope.visitorView);
+		}
+
 	});
 
-app.controller('getcontroller', function($scope, $http, $location) {
-	$scope.getfunction = function() {
-		var url = $location.absUrl() + "getallcustomer";
+app.controller('getUserController', function($scope, $rootScope, $http, $location) {
+	$rootScope.$on('viewVisitorShar', function(event, obj) {
+		$scope.isViewVisitor = true;
+		$scope.viewVisitor = obj;
 
-		var config = {
-			headers : {
-				'Content-Type' : 'application/json;charset=utf-8;'
-			}
-		}
-
-		$http.get(url, config).then(function(response) {
-			$scope.response = response.data
-		}, function(response) {
-			$scope.getResultMessage = "Fail!";
-		});
-	}
+	});
 });

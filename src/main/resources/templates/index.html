@@ -7,18 +7,17 @@
 <title>Work Visit</title>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/node_modules/angularjs-datepicker/src/css/angular-datepicker.css" />
-<link rel="stylesheet" href="/node_modules/angular-moment-picker/dist/angular-moment-picker.min.css" />
+<link rel="stylesheet" href="node_modules/angular-moment-picker/dist/angular-moment-picker.min.css" />
 
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.min.js"></script>
+<script src="node_modules/angular/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
-<script src="/node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
-<script src="/node_modules/angularjs-datepicker/src/js/angular-datepicker.js"></script>
-<script src="/node_modules/moment/min/moment.min.js"></script>
-<script src="/node_modules/angular-moment-picker/dist/angular-moment-picker.min.js"></script>
+
+<script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+<script src="node_modules/angular-moment-picker/dist/angular-moment-picker.min.js"></script>
+
 <script src="/js/workVisitController.js"></script>
 
 </head>
@@ -28,13 +27,10 @@
 			<form name="workVisitForm" ng-submit="submitForm(workVisitForm.$valid)" novalidate="true">
 
 				<div class="alert alert-success" ng-show="showSuccessAlert">
-					<button type="button" class="close" data-ng-click="switchBool('showSuccessAlert')">×</button>
-					<strong>Done!</strong> {{successTextAlert}}
+					<button type="button" class="close" data-ng-click="reloadPage()">×</button>
+					<strong>Done!</strong> {{postResultMessage}}
 				</div>
 
-
-				<!-- <label>FirstName</label> <input type="text" name="firstname" class="form-control" ng-model="firstname" /> <input type="text" name="lastname" class="form-control"
-					ng-model="lastname" /> -->
 				<h4 th:text="'WORK VISIT'" />
 				<p>Schedule a Work Visit by providing the IBX and Cage you will need access to the dates and times of the visit and some basic information about the visitors who
 					will be arriving at the site.</p>
@@ -78,9 +74,11 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="visitor in visitors | filter:f" ng-disabled="selVisitors" ng-click="wvSelected(visitor);">
-									<td width="410">{{visitor.firstName}}, {{visitor.lastName}}</td>
-									<td><a id="release" th:href="@{/viewDetails/{{visitor.firstName}}}"><label style="border: 1px solid blue;" th:text="'View Details'" /> </a> <span>&nbsp;</span></td>
+								<tr ng-repeat="visitor in visitors | filter:f" ng-disabled="selVisitors">
+									<td ng-click="wvSelected(visitor);" width="390">{{visitor.firstName}}, {{visitor.lastName}}</td>
+									<td><button type="button" class="btn btn-primary" ng-click="getfunction(visitor)">View Details</button></td>
+									<!-- <td><button type="button" class="btn btn-primary" ng-click="getfunction()">View Details</button></td> -->
+									<!-- <td><a id="release" th:href="@{/viewDetails/{{visitor.lastName}}}"><button class="btn btn-primary">View Details</button> </a> <span>&nbsp;</span></td> -->
 								</tr>
 							</tbody>
 						</table>
@@ -116,8 +114,7 @@
 							<label><h5 th:text="'Start Date/Time'" /></label><span class="required">*</span>
 							<div class="input-group" moment-picker="startDate" min-date="minDateString" today="true" start-view="month" format="YYYY/MM/DD">
 								<span class="input-group-addon"> <i class="octicon octicon-calendar"></i>
-								</span> <input class="form-control" placeholder="Select a date" ng-model="startDate" name="startDate"
-									ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
+								</span> <input class="form-control" placeholder="Select a date" ng-model="startDate" name="startDate" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
 							</div>
 							<p ng-show="workVisitForm.startDate.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.startDate.$dirty)" class="text-danger">Please Select
 								Start Date</p>
@@ -138,31 +135,63 @@
 							</div>
 							<p ng-show="workVisitForm.endDate.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.endDate.$dirty)" class="text-danger">Please Select End
 								Date</p>
-
+							<p ng-show="endDateValid" class="text-danger">{{errMessage}}</p>
 							<div class="input-group" moment-picker="endTime" format="LT">
 								<span class="input-group-addon"> <i class="octicon octicon-clock"></i>
 								</span> <input class="form-control" placeholder="Select a time" ng-model="endTime" name="endTime" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
 							</div>
 							<p ng-show="workVisitForm.endTime.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.endTime.$dirty)" class="text-danger">Please Select End
 								Time</p>
+						</div>
+					</div>
+				</div>
+				<br /> <br />
+				<div class="row col-md-12">
+					<div class="backgroudFooter ">
+						<div style="position: absolute; bottom: 0; right: 0;">
+							<label>Request Complete?</label>
+							<button type="submit" class="btn btn-primary" ng-disabled="workVisitForm.$invalid">Submit</button>
+						</div>
+					</div>
+				</div>
+<!-- 
+				Modal
+				<div class="modal fade" id="myModal" role="dialog">
+					<div class="modal-dialog">
 
-							<!-- <datepicker date-format="yyyy-MM-dd" selector="form-control">
-							<div class="input-group">
-								<input class="form-control" ng-model="wv.endDate" placeholder="Choose a date" /> <span
-									class="input-group-addon" style="cursor: pointer"> <i class="fa fa-lg fa-calendar"></i>
-								</span>
+						Modal content
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">
+									<i class="glyphicon glyphicon-thumbs-up"></i> Success
+								</h4>
 							</div>
-							</datepicker> -->
+							<div class="modal-body">
+								<p>Successfully Submitted Visitor(s).</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" ng-click="reloadPage()" data-dismiss="modal">Close</button>
+							</div>
 						</div>
 
 					</div>
-				</div>
-				<div class="row" style="position: relative; left: 80%; right: 10%; bottom: 50%;">
-					<label>Request Complete?</label>
+				</div> -->
 
-					<button type="submit" class="btn btn-primary">Submit Request</button>
-				</div>
 			</form>
+		</div>
+
+	</div>
+	<br />
+	<div class="container" style="border: 1px solid #cecece;">
+		<div class="col-sm-4 " ng-show="isViewVisitor" ng-controller="getUserController">
+			<h2>
+				<strong>Visitor Details</strong>
+			</h2>
+			<div class="panel panel-default well">
+				<label><h4>Visitor First Name:</h4></label>{{viewVisitor.firstName}}<br /> <label><h4>Visitor Last Name:</h4></label>{{viewVisitor.lastName}}<br /> <label><h4>Visitor
+						Company:</h4></label>{{viewVisitor.company}}<br />
+			</div>
 		</div>
 	</div>
 </body>
@@ -214,6 +243,16 @@ tr[ng-click] {
 
 .error-messages {
 	color: red;
+}
+
+.buttonSub {
+	position: absolute;
+	top: 100%;
+	right: 0%;
+}
+
+.backgroudFooter {
+	background-color: #abd7ea;
 }
 </style>
 <script language="JavaScript" type="text/javascript">

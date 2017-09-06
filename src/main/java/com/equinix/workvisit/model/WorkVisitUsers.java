@@ -1,7 +1,6 @@
 package com.equinix.workvisit.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="WORK_VISIT_USERS")
-public class WorkVisitUsers extends AbstractEntity implements Serializable{
+public class WorkVisitUsers implements Serializable{
 
 	
 	/**
@@ -103,55 +102,4 @@ public class WorkVisitUsers extends AbstractEntity implements Serializable{
 		this.company = company;
 	}
 
-	@Override
-	public String getCreateId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setCreateId(String createId) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Timestamp getCreateDt() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setCreateDt(Timestamp createDt) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getUpdateId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setUpdateId(String updateId) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Timestamp getUpdateDt() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setUpdateDt(Timestamp updateDt) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
-
-	
 }

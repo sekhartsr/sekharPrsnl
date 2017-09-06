@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="WORK_VISIT_IBX_INFO")
-public class WorkVisitIBXInfo extends AbstractEntity implements Serializable{
+public class WorkVisitIBXInfo  implements Serializable{
 
 	
 	/**
@@ -84,53 +84,4 @@ public class WorkVisitIBXInfo extends AbstractEntity implements Serializable{
 	public void setCabinet(String cabinet) {
 		this.cabinet = cabinet;
 	}
-
-	@Override
-	public String getCreateId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setCreateId(String createId) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Timestamp getCreateDt() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setCreateDt(Timestamp createDt) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getUpdateId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setUpdateId(String updateId) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Timestamp getUpdateDt() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setUpdateDt(Timestamp updateDt) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

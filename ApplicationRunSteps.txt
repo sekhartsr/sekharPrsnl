@@ -1,0 +1,38 @@
+Steps to Run the WorkVisit Application
+
+1.Import project into STS (IDE) as Maven Existing Project.
+2. got to the "/src/main/resources/static" directory and Run below commands to get the dependencies.
+npm install angular-moment-picker --save
+npm install angular-ui-router --save
+
+mvn clean compile
+mvn clean install -Dmaven.test.skip=true
+
+3. Run the Application either command prompt or STS (IDE).
+Note: please create database before run the application according to the application.properties file
+
+And run below script to get the data when load the page.
+
+work_visit_ibx_info
+====================
+INSERT INTO mydb.work_visit_ibx_info(cabinet, cage, ibx) VALUES ('CH1:cage1:001', 'CH1:cage1', 'CH1');
+INSERT INTO mydb.work_visit_ibx_info(cabinet, cage, ibx) VALUES ('CH2:CAGE1:001', 'CH2:cage1', 'CH2');
+INSERT INTO mydb.work_visit_ibx_info(cabinet, cage, ibx) VALUES ('CH2:CAGE1:002', 'CH2:cage1', 'CH2');
+INSERT INTO mydb.work_visit_ibx_info(cabinet, cage, ibx) VALUES ('CH2:CAGE2:001', 'CH2:cage2', 'CH2');
+
+work_visit_users
+================
+INSERT INTO mydb.work_visit_users(company, first_name, last_name, user_name) VALUES ('Dravid Foundation', 'Rahul', 'Dravid', 'Rahul Dravid');
+INSERT INTO mydb.work_visit_users(company, first_name, last_name, user_name) VALUES ('Sachin Solutions', 'Sachin', 'Tendulkar', 'Sachin Tendulkar');
+INSERT INTO mydb.work_visit_users(company, first_name, last_name, user_name) VALUES ('Tunuri Technologies', 'Tunuri', 'Aanvith', 'Tunuri Aanvith');
+INSERT INTO mydb.work_visit_users(company, first_name, last_name, user_name) VALUES ('Dhoni Solutions', 'MS', 'Dhoni', 'MS Dhoni');
+INSERT INTO mydb.work_visit_users(company, first_name, last_name, user_name) VALUES ('Anil Associations', 'Anil', 'Kumble', 'Anil Kumble');
+INSERT INTO mydb.work_visit_users(company, first_name, last_name, user_name) VALUES ('Ronaldo Foundation', 'Christiano', 'Ronaldo', 'Christiano Ronaldo');
+INSERT INTO mydb.work_visit_users(company, first_name, last_name, user_name) VALUES ('Sourav Solutions', 'Sourav', 'Ganguly', 'Sourav Ganguly');
+INSERT INTO mydb.work_visit_users(company, first_name, last_name, user_name) VALUES ('Roger Technologies', 'Roger', 'Federer', 'Roger Federer');
+INSERT INTO mydb.work_visit_users(company, first_name, last_name, user_name) VALUES ('Srikanth Solutions', 'Kidambi', 'Srikanth', 'Kidambi Srikanth');
+
+Run Spring boot Application
+============================
+mvn spring-boot:run (command prompt)
+

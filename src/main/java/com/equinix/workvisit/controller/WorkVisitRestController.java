@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.equinix.workvisit.model.WorkVisit;
 import com.equinix.workvisit.model.WorkVisitIBXInfo;
@@ -65,24 +66,30 @@ public class WorkVisitRestController {
 
 	@RequestMapping(value = "/postWorkVisit", method = RequestMethod.POST, consumes = {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public @ResponseBody WorkVisit postWorkVisit(@RequestBody WorkVisit workVisit) {
+	public @ResponseBody ModelAndView postWorkVisit(@RequestBody WorkVisit workVisit) {
 		System.out.println("calling postWorkVisitForm Ibx: " + workVisit.getStartDate());
-		if (workVisit != null) {
-			for (WorkVisitUsers workVisitUser : workVisit.getWorkVisitUsers()) {
-				WorkVisit wrkVisit = new WorkVisit();
-				wrkVisit.setIbx(workVisit.getIbx());
-				wrkVisit.setCage(workVisit.getCage());
-				wrkVisit.setCabinet(workVisit.getCabinet());
-				wrkVisit.setStartDate(workVisit.getStartDate());
-				wrkVisit.setEndDate(workVisit.getEndDate());
-				wrkVisit.setStartTime(workVisit.getStartTime());
-				wrkVisit.setEndTime(workVisit.getEndTime());
-				wrkVisit.setCreateDt(getSQLTimestamp());
-				wrkVisit.setWorkVisitUser(workVisitUser.getUserName());
-				workVisitService.save(wrkVisit);
+		ModelAndView mav = new ModelAndView("index");
+		try {
+			if (workVisit != null) {
+				for (WorkVisitUsers workVisitUser : workVisit.getWorkVisitUsers()) {
+					WorkVisit wrkVisit = new WorkVisit();
+					wrkVisit.setIbx(workVisit.getIbx());
+					wrkVisit.setCage(workVisit.getCage());
+					wrkVisit.setCabinet(workVisit.getCabinet());
+					wrkVisit.setStartDate(workVisit.getStartDate());
+					wrkVisit.setEndDate(workVisit.getEndDate());
+					wrkVisit.setStartTime(workVisit.getStartTime());
+					wrkVisit.setEndTime(workVisit.getEndTime());
+					wrkVisit.setCreateDt(getSQLTimestamp());
+					wrkVisit.setWorkVisitUser(workVisitUser.getUserName());
+					workVisitService.save(wrkVisit);
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return workVisit;
+		mav.addObject("workVisit", workVisit);
+		return mav;
 	}
 
 	protected Timestamp getSQLTimestamp() {
