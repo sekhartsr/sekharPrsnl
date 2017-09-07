@@ -6,23 +6,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Work Visit</title>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-<link rel="stylesheet" href="node_modules/angular-moment-picker/dist/angular-moment-picker.min.css" />
+<link rel="stylesheet" href="/node_modules/angularjs-bootstrap-jquery/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/node_modules/angular-moment-picker/dist/angular-moment-picker.min.css" />
+<link rel="stylesheet" href="/css/styles.css" />
 
 <script src="node_modules/angular/angular.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
+<script src="/bower_components/angular-ui-utils/ui-utils.min.js"></script>
+<script src="/node_modules/angularjs-bootstrap-jquery/jquery/jquery.min.js"></script>
+<script src="/node_modules/angularjs-bootstrap-jquery/bootstrap/js/bootstrap.min.js"></script>
+<script src="/node_modules/moment/min/moment-with-locales.min.js"></script>
 
-<script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
-<script src="node_modules/angular-moment-picker/dist/angular-moment-picker.min.js"></script>
+<script src="/node_modules/angular-moment-picker/dist/angular-moment-picker.min.js"></script>
 
 <script src="/js/workVisitController.js"></script>
 
 </head>
 <body>
-	<div class="container" style="border: 1px solid #cecece;">
+	<div class="container" style="border: 2px solid #99c2de;">
 		<div class="col-sm-12" ng-controller="postcontroller">
 			<form name="workVisitForm" ng-submit="submitForm(workVisitForm.$valid)" novalidate="true">
 
@@ -37,22 +37,22 @@
 				<h4 th:text="'IBX Information'" />
 
 				<div class="row panel panel-default">
-					<div class="col-sm-4 margin-10">
-						<label><h5 th:text="'IBX'" /></label><span class="required">*</span> <select style="width: auto;" ng-model="ibx" name="ibx"
+					<div class="col-sm-4 margin-10 form-inline dropdown">
+						<label><h5 th:text="'IBX'" /></label><span class="required">*</span> <select class="input-block-level"  style="width: auto;" ng-model="ibx" name="ibx"
 							ng-options="o.ibx for o in IbsVals | unique:'ibx'" ng-change="getCage()" ng-required="true">
 							<option value="">Select an IBX</option>
 						</select>
 						<p ng-show="workVisitForm.ibx.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.ibx.$dirty)" class="text-danger">Please Select IBX</p>
 					</div>
-					<div class="col-sm-4 margin-10">
-						<label><h5 th:text="'Cage/Suite'" /></label><span class="required">*</span> <select style="width: auto;" ng-model="cage" name="cage"
+					<div class=" col-sm-4 margin-10">
+						<label><h5 th:text="'Cage/Suite'" /></label><span class="required">*</span> <select class="input-block-level" style="width: auto;" ng-model="cage" name="cage"
 							ng-options="o.cage for o in cageList | unique:'cage'" ng-change="getCabinet()" ng-required="true">
 							<option value="">Select a Cage</option>
 						</select>
 						<p ng-show="workVisitForm.cage.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.cage.$dirty)" class="text-danger">Please Select Cage</p>
 					</div>
 					<div class="col-sm-4 margin-10">
-						<label><h5 th:text="'Cabinets'" /></label><span class="required">*</span> <select style="width: auto;" ng-model="cabinet" name="cabinet"
+						<label><h5 th:text="'Cabinets'" /></label><span class="required">*</span> <select  style="width:auto;" class="input-block-level" ng-model="cabinet" name="cabinet"
 							ng-options="o.cabinet for o in cabinetList | unique:'cabinet'" ng-required="true">
 							<option value="">Select Cabinets</option>
 						</select>
@@ -67,18 +67,16 @@
 				<div class="row">
 					<div class="col-sm-6 margin-80">
 
-						<table class="table table-condensed table-hover">
+						<table class="table table-hover table-condensed">
 							<thead>
 								<tr>
 									<td><input ng-model="f.lastName" th:placeholder="'Enter Name'" /></td>
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="visitor in visitors | filter:f" ng-disabled="selVisitors">
-									<td ng-click="wvSelected(visitor);" width="390">{{visitor.firstName}}, {{visitor.lastName}}</td>
+								<tr ng-repeat="visitor in visitors | filter:f ">
+									<td ng-click="wvSelected(visitor);" class="pointerSbl " width="390">{{visitor.firstName}}, {{visitor.lastName}}</td>
 									<td><button type="button" class="btn btn-primary" ng-click="getfunction(visitor)">View Details</button></td>
-									<!-- <td><button type="button" class="btn btn-primary" ng-click="getfunction()">View Details</button></td> -->
-									<!-- <td><a id="release" th:href="@{/viewDetails/{{visitor.lastName}}}"><button class="btn btn-primary">View Details</button> </a> <span>&nbsp;</span></td> -->
 								</tr>
 							</tbody>
 						</table>
@@ -90,7 +88,6 @@
 							</a>
 						</h4>
 						</p>
-						<!-- <label><h4 th:text="'Verify Your Selections'" /> <span class="glyphicon glyphicon-exclamation-sign"></span></label> -->
 						<table class="table table-striped">
 							<tr>
 								<th width="300">Name</th>
@@ -102,51 +99,54 @@
 								<!-- <tr class="well"> -->
 								<td width="300">{{selVisitor.userName}}</td>
 								<td width="300">{{ selVisitor.company }}</td>
-								<td width="20"><a ng-click="remove(selVisitor)"><label th:text="'Remove'" /> </a></td>
+								<td width="20"><a ng-click="remove(selVisitor)"><label class="pointerSbl" th:text="'Remove'" /> </a></td>
 							</tr>
 						</table>
 						<p ng-show="!selVisitors.length &amp;&amp; (workVisitForm.$submitted)" class="text-danger">Please Verify your selection</p>
 					</div>
 				</div>
 				<div class="row">
-					<div class="form-group">
-						<div class="col-md-4">
+					<div class="form-group form-inline">
+						<div class="col-md-3 ">
 							<label><h5 th:text="'Start Date/Time'" /></label><span class="required">*</span>
 							<div class="input-group" moment-picker="startDate" min-date="minDateString" today="true" start-view="month" format="YYYY/MM/DD">
-								<span class="input-group-addon"> <i class="octicon octicon-calendar"></i>
-								</span> <input class="form-control" placeholder="Select a date" ng-model="startDate" name="startDate" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
+								<span class="input-group-addon"> <i class="octicon octicon-calendar glyphicon glyphicon-calendar"></i>
+								</span> <input class="form-control" placeholder="YYYY/MM/DD" ng-model="startDate" name="startDate" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
 							</div>
 							<p ng-show="workVisitForm.startDate.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.startDate.$dirty)" class="text-danger">Please Select
 								Start Date</p>
 							<div class="input-group" moment-picker="startTime" format="LT">
-								<span class="input-group-addon"> <i class="octicon octicon-clock"></i>
-								</span> <input class="form-control" placeholder="Select a time" ng-model="startTime" name="startTime" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
+								<span class="input-group-addon"> <i class="octicon octicon-clock glyphicon glyphicon-time"></i>
+								</span> <input class="form-control" placeholder="HH:MM AM/PM" ng-model="startTime" name="startTime" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
 							</div>
 							<p ng-show="workVisitForm.startTime.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.startTime.$dirty)" class="text-danger">Please Select
 								Start Time</p>
 						</div>
+						<div class="col-md-2">
+						</div>
 
-						<div class="col-md-4">
+						<div class="col-md-3">
 							<label><h5 th:text="'End Date/Time'" /></label><span class="required">*</span>
 
 							<div class="input-group" moment-picker="endDate" min-date="minEndDateString" today="true" start-view="month" format="YYYY/MM/DD">
-								<span class="input-group-addon"> <i class="octicon octicon-calendar"></i>
-								</span> <input class="form-control" placeholder="Select a date" ng-model="endDate" name="endDate" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
+								<span class="input-group-addon"> <i class="octicon octicon-calendar glyphicon glyphicon-calendar"></i>
+								</span> <input class="form-control" placeholder="YYYY/MM/DD" ng-model="endDate" name="endDate" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
 							</div>
 							<p ng-show="workVisitForm.endDate.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.endDate.$dirty)" class="text-danger">Please Select End
 								Date</p>
 							<p ng-show="endDateValid" class="text-danger">{{errMessage}}</p>
 							<div class="input-group" moment-picker="endTime" format="LT">
-								<span class="input-group-addon"> <i class="octicon octicon-clock"></i>
-								</span> <input class="form-control" placeholder="Select a time" ng-model="endTime" name="endTime" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
+								<span class="input-group-addon"> <i class="octicon octicon-clock glyphicon glyphicon-time"></i>
+								</span> <input class="form-control" placeholder="HH:MM AM/PM" ng-model="endTime" name="endTime" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
 							</div>
 							<p ng-show="workVisitForm.endTime.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.endTime.$dirty)" class="text-danger">Please Select End
 								Time</p>
+							<p ng-show="endTimeValid" class="text-danger">{{errTimeMessage}}</p>
 						</div>
 					</div>
 				</div>
 				<br /> <br />
-				<div class="row col-md-12">
+				<div class="row col-md-12 ">
 					<div class="backgroudFooter ">
 						<div style="position: absolute; bottom: 0; right: 0;">
 							<label>Request Complete?</label>
@@ -154,30 +154,6 @@
 						</div>
 					</div>
 				</div>
-<!-- 
-				Modal
-				<div class="modal fade" id="myModal" role="dialog">
-					<div class="modal-dialog">
-
-						Modal content
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">
-									<i class="glyphicon glyphicon-thumbs-up"></i> Success
-								</h4>
-							</div>
-							<div class="modal-body">
-								<p>Successfully Submitted Visitor(s).</p>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-default" ng-click="reloadPage()" data-dismiss="modal">Close</button>
-							</div>
-						</div>
-
-					</div>
-				</div> -->
-
 			</form>
 		</div>
 
@@ -196,65 +172,3 @@
 	</div>
 </body>
 </html>
-<style>
-input[type=text], select {
-	width: 100%;
-	padding: 10px 0;
-	margin: 8px 0;
-	display: inline-block;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	box-sizing: border-box;
-}
-
-p.ridge {
-	border-style: ridge;
-}
-
-.required {
-	color: red;
-}
-
-select {
-	min-width: 120px;
-	max-width: 120px;
-}
-
-select:focus {
-	width: auto;
-}
-
-tbody {
-	height: 200px;
-	display: inline-block;
-	width: 100%;
-	overflow: auto;
-	width: 100%;
-	border: 1px solid #ccc;
-}
-
-thead {
-	display: inline-block;
-}
-
-tr[ng-click] {
-	cursor: pointer;
-}
-
-.error-messages {
-	color: red;
-}
-
-.buttonSub {
-	position: absolute;
-	top: 100%;
-	right: 0%;
-}
-
-.backgroudFooter {
-	background-color: #abd7ea;
-}
-</style>
-<script language="JavaScript" type="text/javascript">
-
-</script>

@@ -128,10 +128,29 @@ app.controller('postcontroller',
 			if ($scope.workVisitForm.$valid) {
 				var startDate = new Date($scope.startDate);
 				var endDate = new Date($scope.endDate);
+				var startTime = $scope.startTime;
+				var endTime = $scope.endTime;
+
+				console.log(startTime);
+				console.log(endTime);
 				if (startDate > endDate) {
 					$scope.endDateValid = true;
 					$scope.errMessage = 'End Date should be greate than start date';
 					return false;
+				}
+
+				if (startDate = endDate) {
+					var strTime = convertTime(startTime);
+					var edTime = convertTime(endTime);
+					var timeStr = ('0' + strTime).slice(-2);
+					var timeend = ('0' + edTime).slice(-2);
+					console.log("strTime: [" + strTime + "]");
+					console.log("edTime: [" + edTime + "]");
+					if (timeStr > timeend) {
+						$scope.endTimeValid = true;
+						$scope.errTimeMessage = 'End Time should be greate than start Time';
+						return false;
+					}
 				}
 				if (confirm("Do u want to continue?")) {
 					var data = {
@@ -162,6 +181,12 @@ app.controller('postcontroller',
 				console.log("Validation Failed---------------");
 				return false;
 			}
+		}
+		// A function to convert your 12-hour clock in to a 24-hour one
+		function convertTime(t) {
+			var time = new Date("0001-01-01 " + t);
+			var formatted = time.getHours() + ':' + ('0' + time.getMinutes()).slice(-2);
+			return formatted;
 		}
 
 		$scope.reloadPage = function() {
