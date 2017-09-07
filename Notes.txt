@@ -3,7 +3,8 @@ Steps to Run the WorkVisit Application
 1.Import project into STS (IDE) as Maven Existing Project.
 2. got to the "/src/main/resources/static" directory and Run below commands to get the dependencies.
 npm install angular-moment-picker --save
-npm install angular-ui-router --save
+npm i angularjs-bootstrap-jquery --save
+bower install angular-ui-utils\#bower
 
 mvn clean compile
 mvn clean install -Dmaven.test.skip=true
