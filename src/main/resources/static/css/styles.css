@@ -1,0 +1,61 @@
+@CHARSET "ISO-8859-1";
+
+p.ridge {
+	border-style: ridge;
+}
+
+.required {
+	color: red;
+}
+
+select:focus {
+	width: auto;
+}
+
+tbody {
+	height: 200px;
+	display: inline-block;
+	width: 100%;
+	overflow: auto;
+	width: 100%;
+	border: 1px solid #ccc;
+}
+
+thead {
+	display: inline-block;
+}
+
+tr[ng-click] {
+	cursor: pointer;
+}
+
+.error-messages {
+	color: red;
+}
+
+.pointerSbl {
+	cursor: pointer;
+}
+
+.buttonSub {
+	position: absolute;
+	top: 100%;
+	right: 0%;
+}
+
+.backgroudFooter {
+	background-color: #abd7ea;
+}
+
+.input-block-level {
+	display: inline-block;
+	width: 100%;
+	min-height: 28px;
+	.
+	box-sizing
+	(border-box);
+}
+
+#main span, #main input {
+  display: inline-block;
+}
