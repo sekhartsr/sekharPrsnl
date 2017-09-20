@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Work Visit</title>
+<title th:text="#{lbl.wrk.visit}"></title>
 
 <link rel="stylesheet" href="/node_modules/angularjs-bootstrap-jquery/bootstrap/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/node_modules/angular-moment-picker/dist/angular-moment-picker.min.css" />
@@ -31,38 +31,36 @@
 					<strong>Done!</strong> {{postResultMessage}}
 				</div>
 
-				<h4 th:text="'WORK VISIT'" />
-				<p>Schedule a Work Visit by providing the IBX and Cage you will need access to the dates and times of the visit and some basic information about the visitors who
-					will be arriving at the site.</p>
-				<h4 th:text="'IBX Information'" />
+				<h4 th:text="#{lbl.wrk.visit}" />
+				<p th:text="#{lbl.wrk.visit.info}"></p>
+				<h4 th:text="#{lbl.ibx.info}" />
 
 				<div class="row panel panel-default">
 					<div class="col-sm-4 margin-10 form-inline dropdown">
-						<label><h5 th:text="'IBX'" /></label><span class="required">*</span> <select class="input-block-level"  style="width: auto;" ng-model="ibx" name="ibx"
+						<label><h5 th:text="#{lbl.ibx}" /></label><span class="required">*</span> <select class="input-block-level" style="width: auto;" ng-model="ibx" name="ibx"
 							ng-options="o.ibx for o in IbsVals | unique:'ibx'" ng-change="getCage()" ng-required="true">
 							<option value="">Select an IBX</option>
 						</select>
 						<p ng-show="workVisitForm.ibx.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.ibx.$dirty)" class="text-danger">Please Select IBX</p>
 					</div>
 					<div class=" col-sm-4 margin-10">
-						<label><h5 th:text="'Cage/Suite'" /></label><span class="required">*</span> <select class="input-block-level" style="width: auto;" ng-model="cage" name="cage"
+						<label><h5 th:text="#{lbl.cage.suite}" /></label><span class="required">*</span> <select class="input-block-level" style="width: auto;" ng-model="cage" name="cage"
 							ng-options="o.cage for o in cageList | unique:'cage'" ng-change="getCabinet()" ng-required="true">
 							<option value="">Select a Cage</option>
 						</select>
 						<p ng-show="workVisitForm.cage.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.cage.$dirty)" class="text-danger">Please Select Cage</p>
 					</div>
 					<div class="col-sm-4 margin-10">
-						<label><h5 th:text="'Cabinets'" /></label><span class="required">*</span> <select  style="width:auto;" class="input-block-level" ng-model="cabinet" name="cabinet"
-							ng-options="o.cabinet for o in cabinetList | unique:'cabinet'" ng-required="true">
+						<label><h5 th:text="#{lbl.cabinets}" /></label><span class="required">*</span> <select style="width: auto;" class="input-block-level" ng-model="cabinet"
+							name="cabinet" ng-options="o.cabinet for o in cabinetList | unique:'cabinet'" ng-required="true">
 							<option value="">Select Cabinets</option>
 						</select>
 						<p ng-show="workVisitForm.cabinet.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.cabinet.$dirty)" class="text-danger">Please Select
 							Cabinet</p>
 					</div>
 				</div>
-				<h4 th:text="'Visitor(s)'" />
-				<p>Please select the users that will be visiting the IBX by checking the box next to their name. User details can be viewed by expanding theri list entry. Search
-					by last name to locate users.</p>
+				<h4 th:text="#{lbl.vstrs}" />
+				<p th:text="#{lbl.vstrs.info}"></p>
 
 				<div class="row">
 					<div class="col-sm-6 margin-80">
@@ -84,7 +82,7 @@
 					<div class="col-sm-6 margin-10">
 						<p>
 						<h4>
-							Verify Your Selections <a href="#"> <span class="glyphicon glyphicon-exclamation-sign"></span>
+							<span th:text="#{lbl.vrf.slcts}"></span> <a href="#"> <span class="glyphicon glyphicon-exclamation-sign"></span>
 							</a>
 						</h4>
 						</p>
@@ -108,7 +106,7 @@
 				<div class="row">
 					<div class="form-group form-inline">
 						<div class="col-md-3 ">
-							<label><h5 th:text="'Start Date/Time'" /></label><span class="required">*</span>
+							<label><h5 th:text="#{lbl.strt.dttm}" /></label><span class="required">*</span>
 							<div class="input-group" moment-picker="startDate" min-date="minDateString" today="true" start-view="month" format="YYYY/MM/DD">
 								<span class="input-group-addon"> <i class="octicon octicon-calendar glyphicon glyphicon-calendar"></i>
 								</span> <input class="form-control" placeholder="YYYY/MM/DD" ng-model="startDate" name="startDate" ng-model-options="{ updateOn: 'blur' }" ng-required="true" />
@@ -122,11 +120,10 @@
 							<p ng-show="workVisitForm.startTime.$error.required &amp;&amp; (workVisitForm.$submitted || workVisitForm.startTime.$dirty)" class="text-danger">Please Select
 								Start Time</p>
 						</div>
-						<div class="col-md-2">
-						</div>
+						<div class="col-md-2"></div>
 
 						<div class="col-md-3">
-							<label><h5 th:text="'End Date/Time'" /></label><span class="required">*</span>
+							<label><h5 th:text="#{lbl.end.dttm}" /></label><span class="required">*</span>
 
 							<div class="input-group" moment-picker="endDate" min-date="minEndDateString" today="true" start-view="month" format="YYYY/MM/DD">
 								<span class="input-group-addon"> <i class="octicon octicon-calendar glyphicon glyphicon-calendar"></i>
@@ -146,14 +143,11 @@
 					</div>
 				</div>
 				<br /> <br />
-				<div class="row col-md-12 ">
-					<div class="backgroudFooter ">
-						<div style="position: absolute; bottom: 0; right: 0;">
-							<label>Request Complete?</label>
-							<button type="submit" class="btn btn-primary" ng-disabled="workVisitForm.$invalid">Submit</button>
-						</div>
-					</div>
+				<div class="row col-md-12 bg-primary " style="position: absolute; bottom: 90; right: 90; text-align: right">
+					<label th:text="#{lbl.rqst.cmplt}"></label>
+					<button type="submit" class="btn btn-danger" ng-disabled="workVisitForm.$invalid">Submit</button>
 				</div>
+				<br /> <br /> <br />
 			</form>
 		</div>
 
@@ -165,8 +159,8 @@
 				<strong>Visitor Details</strong>
 			</h2>
 			<div class="panel panel-default well">
-				<label><h4>Visitor First Name:</h4></label>{{viewVisitor.firstName}}<br /> <label><h4>Visitor Last Name:</h4></label>{{viewVisitor.lastName}}<br /> <label><h4>Visitor
-						Company:</h4></label>{{viewVisitor.company}}<br />
+				<label><h4>Visitor First Name :</h4></label>{{viewVisitor.firstName}}<br /> <label><h4>Visitor Last Name :</h4></label>{{viewVisitor.lastName}}<br /> <label><h4>Visitor
+						Company :</h4></label>{{viewVisitor.company}}<br />
 			</div>
 		</div>
 	</div>
