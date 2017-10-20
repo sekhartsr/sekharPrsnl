@@ -74,7 +74,7 @@
 							<tbody>
 								<tr ng-repeat="visitor in visitors | filter:f ">
 									<td ng-click="wvSelected(visitor);" class="pointerSbl " width="390">{{visitor.firstName}}, {{visitor.lastName}}</td>
-									<td><button type="button" class="btn btn-primary" ng-click="getfunction(visitor)">View Details</button></td>
+									<td><button type="button" class="btn button1" ng-click="getfunction(visitor)">View Details</button></td>
 								</tr>
 							</tbody>
 						</table>
@@ -82,7 +82,7 @@
 					<div class="col-sm-6 margin-10">
 						<p>
 						<h4>
-							<span th:text="#{lbl.vrf.slcts}"></span> <a href="#"> <span class="glyphicon glyphicon-exclamation-sign"></span>
+							<span th:text="#{lbl.vrf.slcts}"></span> <a href="#"> <span style="color:#20B2AA" class="glyphicon glyphicon-exclamation-sign"></span>
 							</a>
 						</h4>
 						</p>
@@ -90,14 +90,14 @@
 							<tr>
 								<th width="300">Name</th>
 								<th width="300">Company</th>
-								<th width="20"></th>
+								<th width="150"></th>
 							</tr>
 
 							<tr ng-repeat="selVisitor in selVisitors track by $index">
 								<!-- <tr class="well"> -->
 								<td width="300">{{selVisitor.userName}}</td>
 								<td width="300">{{ selVisitor.company }}</td>
-								<td width="20"><a ng-click="remove(selVisitor)"><label class="pointerSbl" th:text="'Remove'" /> </a></td>
+								<td width="150"><a ng-click="remove(selVisitor)"><strong><span class="glyphicon pointerSbl">&#xe020;&nbsp;Remove</span> </strong></a></td>
 							</tr>
 						</table>
 						<p ng-show="!selVisitors.length &amp;&amp; (workVisitForm.$submitted)" class="text-danger">Please Verify your selection</p>
@@ -142,10 +142,12 @@
 						</div>
 					</div>
 				</div>
-				<br /> <br />
-				<div class="row col-md-12 bg-primary " style="position: absolute; bottom: 90; right: 90; text-align: right">
+				<br />
+				<span class="required">* </span><span th:text="#{lbl.req.msg}"></span>
+				 <br /> <br />
+				<div class="row col-md-12 backgroudFooter " style="position: absolute; bottom: 90; right: 90; text-align: right">
 					<label th:text="#{lbl.rqst.cmplt}"></label>
-					<button type="submit" class="btn btn-danger" ng-disabled="workVisitForm.$invalid">Submit</button>
+					<button type="submit" class="btn button5" ng-disabled="workVisitForm.$invalid">Submit</button>
 				</div>
 				<br /> <br /> <br />
 			</form>
