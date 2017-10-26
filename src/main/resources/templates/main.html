@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="app" xmlns:th="http://www.thymeleaf.org">
 <head>
-<link rel="icon" type="image/png" href="/images/equinix_logo.ico"/>
+<link rel="icon" type="image/png" href="/images/equinix_logo.ico" />
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,10 +20,15 @@
 <script src="/node_modules/angular-moment-picker/dist/angular-moment-picker.min.js"></script>
 
 <script src="/js/controllers/workVisitController.js"></script>
-
 </head>
 <body>
 	<div class="container" style="border: 2px solid #99c2de;">
+		<ul class="nav nav-tabs">
+			<li class="nav-item"><a class="nav-link active" href="/main">Work Visit</a></li>
+			<li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
+			<li class="nav-item"><a class="nav-link" href="/hello">Hello</a></li>
+		</ul>
+
 		<div class="col-sm-12" ng-controller="postcontroller">
 			<form name="workVisitForm" ng-submit="submitForm(workVisitForm.$valid)" novalidate="true">
 
