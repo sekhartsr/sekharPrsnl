@@ -1,16 +1,17 @@
 var app = angular.module('app', [ 'ui.utils', 'moment-picker' ]);
 app.controller('postcontroller',
-	function($scope, $rootScope, $timeout, $http, $location) {
+	function($scope, $rootScope, $timeout, $http, $location, $window) {
 
 		// Get all the visitors and IBX List for Select IBX OnLoad from DB
 		$scope.$watch('$viewContentLoaded', function() {
-			var url = $location.absUrl();
+			var url = new $window.URL($location.absUrl()).origin;
+			/*var url = $location.absUrl();*/
 			var config = {
 				headers : {
 					'Content-Type' : 'application/json;charset=utf-8;'
 				}
 			}
-			$http.get(url + "getallUsers", config).then(function(response) {
+			$http.get(url + "/getAllUsers", config).then(function(response) {
 				$scope.visitors = response.data;
 				$rootScope.totalVisitors = response.data;
 
@@ -18,7 +19,7 @@ app.controller('postcontroller',
 				$scope.getResultMessage = "Fail!";
 			});
 
-			$http.get(url + "getIBXInfo", config).then(function(response) {
+			$http.get(url + "/getIBXInfo", config).then(function(response) {
 				$scope.IbsVals = response.data;
 
 			}, function(response) {

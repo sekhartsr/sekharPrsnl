@@ -40,7 +40,7 @@ public class WorkVisitRestController {
 
 	List<WorkVisitUsers> workVisitUsers = new ArrayList<WorkVisitUsers>();
 
-	@RequestMapping(value = "/getallUsers", method = RequestMethod.GET)
+	@RequestMapping(value = "/getAllUsers", method = RequestMethod.GET)
 	public List<WorkVisitUsers> getAllUsers() {
 		List<WorkVisitUsers> workVisitUsers = workVisitUsersService.findAll();
 		return workVisitUsers;

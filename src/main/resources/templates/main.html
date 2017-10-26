@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="app" xmlns:th="http://www.thymeleaf.org">
 <head>
+<link rel="icon" type="image/png" href="/images/equinix_logo.ico"/>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -18,7 +19,7 @@
 
 <script src="/node_modules/angular-moment-picker/dist/angular-moment-picker.min.js"></script>
 
-<script src="/js/workVisitController.js"></script>
+<script src="/js/controllers/workVisitController.js"></script>
 
 </head>
 <body>
@@ -82,7 +83,7 @@
 					<div class="col-sm-6 margin-10">
 						<p>
 						<h4>
-							<span th:text="#{lbl.vrf.slcts}"></span> <a href="#"> <span style="color:#20B2AA" class="glyphicon glyphicon-exclamation-sign"></span>
+							<span th:text="#{lbl.vrf.slcts}"></span> <a href="#"> <span style="color: #20B2AA" class="glyphicon glyphicon-exclamation-sign"></span>
 							</a>
 						</h4>
 						</p>
@@ -142,9 +143,7 @@
 						</div>
 					</div>
 				</div>
-				<br />
-				<span class="required">* </span><span th:text="#{lbl.req.msg}"></span>
-				 <br /> <br />
+				<br /> <span class="required">* </span><span th:text="#{lbl.req.msg}"></span> <br /> <br />
 				<div class="row col-md-12 backgroudFooter " style="position: absolute; bottom: 90; right: 90; text-align: right">
 					<label th:text="#{lbl.rqst.cmplt}"></label>
 					<button type="submit" class="btn button5" ng-disabled="workVisitForm.$invalid">Submit</button>
