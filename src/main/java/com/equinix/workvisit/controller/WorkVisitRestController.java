@@ -71,7 +71,6 @@ public class WorkVisitRestController {
 	@RequestMapping(value = "/postWorkVisit", method = RequestMethod.POST, consumes = {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public @ResponseBody ModelAndView postWorkVisit(@RequestBody WorkVisit workVisit) {
-		System.out.println("calling postWorkVisitForm Ibx: " + workVisit.getStartDate());
 		ModelAndView mav = new ModelAndView("index");
 		try {
 			if (workVisit != null) {
