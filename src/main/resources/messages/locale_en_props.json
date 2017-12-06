@@ -1,0 +1,5 @@
+{ 
+  "TestString": "Read value from file", 
+  "BooleanValue": false,
+  "lbl_rqst_cmplt": "Request Complete?"
+}

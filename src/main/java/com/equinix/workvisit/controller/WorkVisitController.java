@@ -19,10 +19,16 @@ public class WorkVisitController {
 	@Autowired
 	private WorkVisitRestController workVisitRestController;
 	
+/*	@RequestMapping(value="/main",method = RequestMethod.GET)
+    public String mainPage(){
+        return "main";
+    }
+	
 	@RequestMapping(value="/",method = RequestMethod.GET)
     public String homepage(){
-        return "index";
-    }
+//        return "home";
+        return "main";
+    }*/
 	
 	@RequestMapping(value="/viewDetails/{firstName}",method = RequestMethod.GET)
     public String viewUserDetails(@PathVariable String lastName, Model model){
