@@ -42,21 +42,21 @@ public class WorkVisit implements Serializable{
 	@Column(name = "WV_CABINET")
 	private String cabinet;
 	
-	@Column(name = "WV_USEER")
+	@Column(name = "WV_USER")
 	private String workVisitUser;
 	
 	@Temporal(TemporalType.DATE)
-	@Column(name = "WV_DTLS_START_DT")
+	@Column(name = "WV_START_DATE")
 	private Date startDate;
 	
 	@Temporal(TemporalType.DATE)
-	@Column(name = "WV_DTLS_END_DT")
+	@Column(name = "WV_END_DATE")
 	private Date endDate;
 	
-	@Column(name = "WV_DTLS_START_TM")
+	@Column(name = "WV_START_TIME")
 	private String startTime;
 	
-	@Column(name = "WV_DTLS_END_TM")
+	@Column(name = "WV_END_TIME")
 	private String endTime;
 	
 	@Column(name = "CREATE_DATE")

@@ -1,16 +1,18 @@
-var app = angular.module('app', [ 'ui.utils', 'moment-picker' ]);
+var app = angular.module('app', [ 'ui.utils', 'moment-picker', 'ngMaterial', 'ngMessages', 'ngMaterialDatePicker' ]);
 app.controller('postcontroller',
-	function($scope, $rootScope, $timeout, $http, $location) {
+	function($scope, $rootScope, $timeout, $http, $location, $window) {
 
 		// Get all the visitors and IBX List for Select IBX OnLoad from DB
 		$scope.$watch('$viewContentLoaded', function() {
-			var url = $location.absUrl();
+			var url = new $window.URL($location.absUrl()).origin;
+			/*var url = $location.absUrl();*/
 			var config = {
 				headers : {
 					'Content-Type' : 'application/json;charset=utf-8;'
 				}
 			}
-			$http.get(url + "getallUsers", config).then(function(response) {
+			$http.get(url + "/getAllUsers", config).then(function(response) {
+				console.log("getting All users");
 				$scope.visitors = response.data;
 				$rootScope.totalVisitors = response.data;
 
@@ -18,7 +20,8 @@ app.controller('postcontroller',
 				$scope.getResultMessage = "Fail!";
 			});
 
-			$http.get(url + "getIBXInfo", config).then(function(response) {
+			$http.get(url + "/getIBXInfo", config).then(function(response) {
+				console.log("getting All IBX");
 				$scope.IbsVals = response.data;
 
 			}, function(response) {
@@ -76,17 +79,11 @@ app.controller('postcontroller',
 			}
 		};
 
-		//		min Date to select StartDate
-		$scope.minDateString = moment().subtract(0, 'day').format('YYYY/MM/DD');
-
-		//		min Date to select End Date
-		$scope.endDateSet = function() {
-			var diffDays;
-			var startDate = new Date($scope.startDate);
-			diffDays = startDate.diff(new Date(), 'days');
-			$scope.minEndDateString = moment().subtract(diffDays, 'day').format('YYYY/MM/DD');
+		$scope.getEndMinDate = function() {
+			var minEndDate = new Date($scope.startDate);
+			console.log("minEndDate: " + minEndDate);
+			$scope.minEndDate = minEndDate;
 		}
-		$scope.minEndDateString = moment().subtract(0, 'day').format('YYYY/MM/DD');
 
 		//		select visitor from the list of visitors
 		$scope.selVisitors = [];
@@ -131,27 +128,32 @@ app.controller('postcontroller',
 				var startTime = $scope.startTime;
 				var endTime = $scope.endTime;
 
-				console.log(startTime);
-				console.log(endTime);
+				console.log("startDate: ["+startDate+"]");
+				console.log("endDate: ["+endDate+"]");
+				
+				console.log("STime: ["+startTime+"]");
+				console.log("ETime: ["+endTime+"]");
+				var strTime = startTime.toLocaleTimeString();
+				var enTime = endTime.toLocaleTimeString();
+				console.log("Start Hour: "+strTime);
+				console.log("End Hour: "+enTime);
 				if (startDate > endDate) {
 					$scope.endDateValid = true;
 					$scope.errMessage = 'End Date should be greate than start date';
 					return false;
 				}
 
-				if (startDate = endDate) {
-					var strTime = convertTime(startTime);
-					var edTime = convertTime(endTime);
-					var timeStr = ('0' + strTime).slice(-2);
-					var timeend = ('0' + edTime).slice(-2);
-					console.log("strTime: [" + strTime + "]");
-					console.log("edTime: [" + edTime + "]");
-					if (timeStr > timeend) {
+				if (startDate == endDate) {
+					if (strTime > enTime) {
+						console.log("Time Error");
 						$scope.endTimeValid = true;
 						$scope.errTimeMessage = 'End Time should be greate than start Time';
 						return false;
 					}
+					console.log("Time Without Error");
 				}
+				console.log("startDate: ["+startDate+"]");
+				console.log("endDate: ["+endDate+"]");
 				if (confirm("Do u want to continue?")) {
 					var data = {
 						ibx : $scope.ibx.ibx,
@@ -160,8 +162,8 @@ app.controller('postcontroller',
 						workVisitUsers : $scope.selVisitors,
 						startDate : startDate,
 						endDate : endDate,
-						startTime : $scope.startTime,
-						endTime : $scope.endTime
+						startTime : strTime,
+						endTime : enTime
 					};
 
 					$http.post(url, data, config).then(function(response) {

@@ -4,6 +4,14 @@ Steps to Run the WorkVisit Application
 2. got to the "/src/main/resources/static" directory and Run below commands to get the dependencies.
 npm install angular-moment-picker --save
 npm i angularjs-bootstrap-jquery --save
+npm i angular-messages --save
+npm i angular-material --save
+npm i angular-material-datetimepicker --save
+
+npm install angular-animate --save
+npm i angular-material --save
+npm install angular-aria --save
+
 bower install angular-ui-utils\#bower
 
 mvn clean compile
