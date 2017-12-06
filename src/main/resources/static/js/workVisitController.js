@@ -1,4 +1,4 @@
-var app = angular.module('app', [ 'ui.utils', 'moment-picker' ]);
+var app = angular.module('app', [ 'ui.utils', 'moment-picker', 'ngMaterial', 'ngMessages', 'ngMaterialDatePicker' ]);
 app.controller('postcontroller',
 	function($scope, $rootScope, $timeout, $http, $location) {
 
@@ -76,17 +76,11 @@ app.controller('postcontroller',
 			}
 		};
 
-		//		min Date to select StartDate
-		$scope.minDateString = moment().subtract(0, 'day').format('YYYY/MM/DD');
-
-		//		min Date to select End Date
-		$scope.endDateSet = function() {
-			var diffDays;
-			var startDate = new Date($scope.startDate);
-			diffDays = startDate.diff(new Date(), 'days');
-			$scope.minEndDateString = moment().subtract(diffDays, 'day').format('YYYY/MM/DD');
+		$scope.getEndMinDate = function() {
+			var minEndDate = new Date($scope.startDate);
+			console.log("minEndDate: " + minEndDate);
+			$scope.minEndDate = minEndDate;
 		}
-		$scope.minEndDateString = moment().subtract(0, 'day').format('YYYY/MM/DD');
 
 		//		select visitor from the list of visitors
 		$scope.selVisitors = [];
@@ -131,8 +125,12 @@ app.controller('postcontroller',
 				var startTime = $scope.startTime;
 				var endTime = $scope.endTime;
 
-				console.log(startTime);
-				console.log(endTime);
+				console.log("STime: ["+startTime+"]");
+				console.log("ETime: ["+endTime+"]");
+				var strDate = startTime.toLocaleTimeString();
+				var enDate = endTime.toLocaleTimeString();
+				console.log("Start Hour: "+strDate);
+				console.log("End Hour: "+enDate);
 				if (startDate > endDate) {
 					$scope.endDateValid = true;
 					$scope.errMessage = 'End Date should be greate than start date';
@@ -140,17 +138,13 @@ app.controller('postcontroller',
 				}
 
 				if (startDate = endDate) {
-					var strTime = convertTime(startTime);
-					var edTime = convertTime(endTime);
-					var timeStr = ('0' + strTime).slice(-2);
-					var timeend = ('0' + edTime).slice(-2);
-					console.log("strTime: [" + strTime + "]");
-					console.log("edTime: [" + edTime + "]");
-					if (timeStr > timeend) {
+					if (strDate > enDate) {
+						console.log("Time Error");
 						$scope.endTimeValid = true;
 						$scope.errTimeMessage = 'End Time should be greate than start Time';
 						return false;
 					}
+					console.log("Time Without Error");
 				}
 				if (confirm("Do u want to continue?")) {
 					var data = {
@@ -160,8 +154,8 @@ app.controller('postcontroller',
 						workVisitUsers : $scope.selVisitors,
 						startDate : startDate,
 						endDate : endDate,
-						startTime : $scope.startTime,
-						endTime : $scope.endTime
+						startTime : strDate,
+						endTime : enDate
 					};
 
 					$http.post(url, data, config).then(function(response) {

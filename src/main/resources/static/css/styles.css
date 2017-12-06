@@ -57,5 +57,25 @@ tr[ng-click] {
 }
 
 #main span, #main input {
-  display: inline-block;
+	display: inline-block;
+}
+
+.button1 {
+	background-color: #008070;
+	color: white;
+} /* Green */
+.button2 {
+	background-color: #008CBA;
+} /* Blue */
+.button3 {
+	background-color: #f44336;
+} /* Red */
+.button4 {
+	background-color: #e7e7e7;
+	color: black;
+} /* Gray */
+.button5 {
+	background-color: black;
+	color: white;
+	border: 2px solid #555555;
 }
